@@ -1,163 +1,135 @@
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, Star, ChevronRight, ChevronLeft, BadgeCheck } from 'lucide-react'
+import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
 import { showVehicles, categoryFilters } from '../../data/vehicles'
 import BookingModal from '../layout/BookingModal'
 
-/* ── Vehicle Card ─────────────────────────────────────── */
+/* ── Badge colours per category ──────────────────────────── */
+const badgeStyle = {
+  'vintage-car':  { background: 'rgba(20,14,0,0.82)',  color: '#C9A84C', border: '1px solid rgba(201,168,76,0.4)' },
+  'vintage-bike': { background: 'rgba(20,14,0,0.82)',  color: '#C9A84C', border: '1px solid rgba(201,168,76,0.4)' },
+  'modern-car':   { background: 'rgba(8,18,38,0.82)',  color: '#93C5FD', border: '1px solid rgba(147,197,253,0.35)' },
+  'modified-car': { background: 'rgba(22,8,38,0.82)',  color: '#C084FC', border: '1px solid rgba(192,132,252,0.4)' },
+}
+
+/* ── Vehicle Card ─────────────────────────────────────────── */
 function VehicleCard({ vehicle, onBook }) {
-  const categoryColors = {
-    'vintage-car':  'bg-amber-900/40 text-amber-300/90 border-amber-700/30',
-    'vintage-bike': 'bg-orange-900/40 text-orange-300/90 border-orange-700/30',
-    'modern-car':   'bg-blue-900/40 text-blue-300/90 border-blue-700/30',
-    'modified-car': 'bg-purple-900/40 text-purple-300/90 border-purple-700/30',
-  }
+  const bs = badgeStyle[vehicle.category] || badgeStyle['vintage-car']
+  const [hovered, setHovered] = useState(false)
 
   return (
     <div
-      className="vehicle-card bg-soul-card border border-soul-border overflow-hidden card-hover group flex-shrink-0"
-      style={{ borderRadius: '6px', width: '280px', minWidth: '280px' }}
+      onClick={() => onBook(vehicle)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: '#181818',
+        border: '1px solid #2A2A2A',
+        borderRadius: '6px',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        transform: hovered ? 'translateY(-5px)' : 'translateY(0)',
+        boxShadow: hovered
+          ? '0 20px 50px rgba(0,0,0,0.65), 0 0 0 1px rgba(201,168,76,0.1)'
+          : '0 4px 16px rgba(0,0,0,0.35)',
+        transition: 'transform 0.32s ease, box-shadow 0.32s ease',
+        /* ← mobile horizontal scroll width */
+        flexShrink: 0,
+        width: '282px',
+        minWidth: '282px',
+      }}
     >
-      {/* Image */}
-      <div className="relative overflow-hidden" style={{ height: '172px' }}>
+      {/* ── Image ── */}
+      <div style={{ position: 'relative', height: '185px', overflow: 'hidden' }}>
         <img
           src={vehicle.image}
           alt={vehicle.name}
-          className="w-full h-full object-cover transition-transform duration-600 group-hover:scale-[1.04]"
-        />
-        {/* Subtle bottom gradient */}
-        <div
-          className="absolute inset-x-0 bottom-0"
           style={{
-            height: '60px',
-            background: 'linear-gradient(to top, rgba(24,24,24,0.85) 0%, transparent 100%)',
+            width: '100%', height: '100%', objectFit: 'cover',
+            transform: hovered ? 'scale(1.06)' : 'scale(1)',
+            transition: 'transform 0.65s ease',
           }}
         />
+        {/* bottom gradient */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          height: '65px',
+          background: 'linear-gradient(to top, rgba(10,10,10,0.92) 0%, transparent 100%)',
+        }} />
         {/* Category badge */}
-        <span
-          className={`absolute top-3 left-3 border ${categoryColors[vehicle.category] || 'bg-soul-smoke/60 text-soul-cream border-soul-border'}`}
-          style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
-            fontSize: '0.62rem',
-            fontWeight: 600,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            padding: '3px 8px',
-            borderRadius: '3px',
-            backdropFilter: 'blur(6px)',
-          }}
-        >
+        <span style={{
+          position: 'absolute', top: '12px', left: '12px',
+          fontFamily: 'Inter, sans-serif',
+          fontSize: '0.57rem', fontWeight: 700,
+          letterSpacing: '0.18em', textTransform: 'uppercase',
+          padding: '3px 9px', borderRadius: '3px',
+          backdropFilter: 'blur(8px)',
+          ...bs,
+        }}>
           {vehicle.categoryLabel}
         </span>
-        {/* Verified */}
-        {vehicle.verified && (
-          <span
-            className="absolute top-3 right-3 flex items-center justify-center"
-            style={{
-              width: '26px',
-              height: '26px',
-              borderRadius: '50%',
-              background: 'rgba(10,10,10,0.65)',
-              backdropFilter: 'blur(4px)',
-            }}
-          >
-            <BadgeCheck size={14} className="text-soul-gold" />
-          </span>
-        )}
       </div>
 
-      {/* Body */}
-      <div className="p-4">
-        {/* Title row */}
-        <div className="flex items-start justify-between mb-2">
-          <div className="pr-2">
-            <h3
-              className="text-soul-cream group-hover:text-soul-gold transition-colors duration-200 leading-snug"
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: '0.95rem',
-                fontWeight: 600,
-              }}
-            >
-              {vehicle.name}
-            </h3>
-            <p
-              className="text-soul-muted mt-0.5"
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '0.72rem',
-                letterSpacing: '0.04em',
-              }}
-            >
-              {vehicle.year}
-            </p>
-          </div>
-          <div className="flex items-center gap-1 flex-shrink-0 pt-0.5">
-            <Star size={11} className="text-soul-gold fill-soul-gold" />
-            <span
-              className="text-soul-muted"
-              style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '0.72rem' }}
-            >
-              {vehicle.rating}
+      {/* ── Body ── */}
+      <div style={{ padding: '16px 18px 18px' }}>
+        {/* Name */}
+        <h3 style={{
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontSize: '0.97rem', fontWeight: 600,
+          lineHeight: 1.3,
+          color: hovered ? '#C9A84C' : '#F5EDD6',
+          transition: 'color 0.22s ease',
+          marginBottom: '4px',
+        }}>
+          {vehicle.name}
+        </h3>
+
+        {/* Year */}
+        <p style={{
+          fontFamily: 'Inter, sans-serif',
+          fontSize: '0.7rem', color: '#8A7A5F',
+          marginBottom: '14px',
+        }}>
+          {vehicle.year}
+        </p>
+
+        {/* Divider */}
+        <div style={{ height: '1px', background: 'rgba(42,42,42,0.9)', marginBottom: '14px' }} />
+
+        {/* Location + Price */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', minWidth: 0 }}>
+            <MapPin size={11} style={{ color: '#8A7A5F', flexShrink: 0 }} />
+            <span style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.7rem',
+              color: '#8A7A5F', whiteSpace: 'nowrap',
+              overflow: 'hidden', textOverflow: 'ellipsis',
+            }}>
+              {vehicle.location}
             </span>
           </div>
-        </div>
-
-        {/* Location */}
-        <div className="flex items-center gap-1.5 mb-4">
-          <MapPin size={11} className="text-soul-muted flex-shrink-0" />
-          <span
-            className="text-soul-muted"
-            style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '0.72rem' }}
-          >
-            {vehicle.location}
-          </span>
-        </div>
-
-        {/* Footer */}
-        <div
-          className="flex items-center justify-between pt-3"
-          style={{ borderTop: '1px solid rgba(42,42,42,0.8)' }}
-        >
-          <div>
-            <span
-              className="text-soul-gold font-bold"
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: '1.05rem',
-              }}
-            >
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px', flexShrink: 0 }}>
+            <span style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: '1rem', fontWeight: 700,
+              color: '#C9A84C',
+            }}>
               ₹{vehicle.pricePerDay.toLocaleString()}
             </span>
-            <span
-              className="text-soul-muted ml-1"
-              style={{ fontFamily: 'Inter, system-ui, sans-serif', fontSize: '0.7rem' }}
-            >
+            <span style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.62rem', color: '#8A7A5F',
+            }}>
               / day
             </span>
           </div>
-          <button
-            onClick={() => onBook(vehicle)}
-            className="text-soul-gold border border-soul-gold/35 hover:bg-soul-gold hover:text-soul-black transition-all duration-200"
-            style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              letterSpacing: '0.08em',
-              padding: '6px 14px',
-              borderRadius: '3px',
-              textTransform: 'uppercase',
-            }}
-          >
-            Book
-          </button>
         </div>
       </div>
     </div>
   )
 }
 
-/* ── Featured Vehicles ────────────────────────────────── */
+/* ── Featured Vehicles Section ────────────────────────────── */
 export default function FeaturedVehicles() {
   const [activeFilter, setActiveFilter] = useState('all')
   const scrollRef = useRef(null)
@@ -175,118 +147,184 @@ export default function FeaturedVehicles() {
 
   const scroll = (dir) => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: dir === 'left' ? -304 : 304, behavior: 'smooth' })
+      scrollRef.current.scrollBy({ left: dir === 'left' ? -310 : 310, behavior: 'smooth' })
     }
   }
 
   return (
-    <section id="featured-vehicles" className="bg-soul-black py-20 lg:py-28">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+    <section
+      id="featured-vehicles"
+      style={{ background: '#0A0A0A', padding: '96px 0' }}
+    >
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 40px' }}>
 
-        {/* Section header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-10">
+        {/* ── Section header ── */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          marginBottom: '28px',
+          gap: '16px',
+          flexWrap: 'wrap',
+        }}>
           <div>
-            <p className="section-label mb-3">Our Collection</p>
-            <h2
-              className="font-serif text-soul-cream"
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: 'clamp(1.7rem, 3.5vw, 2.5rem)',
-                fontWeight: 700,
-                lineHeight: 1.15,
-              }}
-            >
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.6rem', fontWeight: 600,
+              letterSpacing: '0.28em', textTransform: 'uppercase',
+              color: '#C9A84C', marginBottom: '10px',
+            }}>
+              Our Collection
+            </p>
+            <h2 style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: 'clamp(1.8rem, 3vw, 2.4rem)',
+              fontWeight: 700, lineHeight: 1.15,
+              color: '#F5EDD6', margin: 0,
+            }}>
               Featured{' '}
-              <span className="text-gold-gradient italic">Vehicles</span>
+              <span style={{
+                background: 'linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontStyle: 'italic',
+              }}>
+                Vehicles
+              </span>
             </h2>
           </div>
+
           <Link
             to="/browse"
             id="view-all-vehicles-btn"
-            className="btn-ghost-gold self-start sm:self-auto"
             style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '0.78rem',
-              letterSpacing: '0.08em',
-              padding: '8px 20px',
+              display: 'inline-flex', alignItems: 'center',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.7rem', fontWeight: 600,
+              letterSpacing: '0.1em', textTransform: 'uppercase',
+              padding: '9px 20px',
+              border: '1px solid #C9A84C', color: '#C9A84C',
+              borderRadius: '4px', textDecoration: 'none',
+              whiteSpace: 'nowrap',
+              transition: 'background 0.2s ease, color 0.2s ease',
             }}
           >
             View All Vehicles
           </Link>
         </div>
 
-        {/* Filter tabs */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {categoryFilters.map(({ key, label }) => (
-            <button
-              key={key}
-              id={`filter-${key}`}
-              onClick={() => setActiveFilter(key)}
-              className={`border transition-all duration-200 ${
-                activeFilter === key
-                  ? 'bg-soul-gold text-soul-black border-soul-gold'
-                  : 'border-soul-border text-soul-muted hover:border-soul-muted hover:text-soul-cream'
-              }`}
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '0.68rem',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                padding: '7px 16px',
-                borderRadius: '3px',
-              }}
-            >
-              {label}
-            </button>
-          ))}
+        {/* ── Filter tabs ── */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
+          {categoryFilters.map(({ key, label }) => {
+            const isActive = activeFilter === key
+            return (
+              <button
+                key={key}
+                id={`filter-${key}`}
+                onClick={() => setActiveFilter(key)}
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.67rem', fontWeight: 600,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
+                  padding: '7px 18px', borderRadius: '3px',
+                  cursor: 'pointer',
+                  background: isActive ? '#C9A84C' : 'transparent',
+                  color: isActive ? '#0A0A0A' : '#8A7A5F',
+                  border: isActive ? '1px solid #C9A84C' : '1px solid #2A2A2A',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {label}
+              </button>
+            )
+          })}
         </div>
 
-        {/* Cards — horizontal scroll on mobile, grid on desktop */}
-        <div className="relative">
-          {/* Scroll arrows (mobile/tablet) */}
+        {/* ── Cards ── */}
+        <div style={{ position: 'relative' }}>
+
+          {/* Scroll buttons — only show when needed */}
           <button
             onClick={() => scroll('left')}
-            className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10
-                       w-8 h-8 bg-soul-dark border border-soul-border rounded-full flex items-center justify-center
-                       text-soul-muted hover:text-soul-gold hover:border-soul-gold transition-all"
+            style={{
+              position: 'absolute', left: '-18px',
+              top: '50%', transform: 'translateY(-50%)',
+              zIndex: 10,
+              width: '36px', height: '36px', borderRadius: '50%',
+              background: '#181818', border: '1px solid #2A2A2A',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#8A7A5F', cursor: 'pointer',
+              transition: 'border-color 0.2s, color 0.2s',
+            }}
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={17} />
           </button>
+
           <button
             onClick={() => scroll('right')}
-            className="lg:hidden absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10
-                       w-8 h-8 bg-soul-dark border border-soul-border rounded-full flex items-center justify-center
-                       text-soul-muted hover:text-soul-gold hover:border-soul-gold transition-all"
+            style={{
+              position: 'absolute', right: '-18px',
+              top: '50%', transform: 'translateY(-50%)',
+              zIndex: 10,
+              width: '36px', height: '36px', borderRadius: '50%',
+              background: '#181818', border: '1px solid #2A2A2A',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#8A7A5F', cursor: 'pointer',
+              transition: 'border-color 0.2s, color 0.2s',
+            }}
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={17} />
           </button>
 
-          {/* Card container */}
+          {/* Scrollable / Grid row */}
           <div
             ref={scrollRef}
-            className="flex lg:grid lg:grid-cols-4 gap-5 overflow-x-auto lg:overflow-visible
-                       pb-4 lg:pb-0 scrollbar-hide scroll-smooth"
+            className="featured-cards-row"
+            style={{
+              display: 'flex',
+              gap: '20px',
+              overflowX: 'auto',
+              paddingBottom: '6px',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
           >
             {filtered.map(vehicle => (
-              <div
-                key={vehicle.id}
-                className="lg:w-auto"
-                style={{ flexShrink: 0 }}
-              >
-                <VehicleCard vehicle={vehicle} onBook={handleBook} />
-              </div>
+              <VehicleCard key={vehicle.id} vehicle={vehicle} onBook={handleBook} />
             ))}
           </div>
-
-          {/* Desktop cards fill naturally — override mobile fixed width */}
-          <style>{`
-            @media (min-width: 1024px) {
-              .vehicle-card { width: 100% !important; min-width: unset !important; }
-            }
-          `}</style>
         </div>
       </div>
+
+      {/* ── Desktop: switch to 4-col grid ── */}
+      <style>{`
+        .featured-cards-row::-webkit-scrollbar { display: none; }
+
+        @media (min-width: 1024px) {
+          .featured-cards-row {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            overflow-x: visible !important;
+          }
+          .featured-cards-row > div {
+            width: auto !important;
+            min-width: unset !important;
+            flex-shrink: unset !important;
+          }
+        }
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .featured-cards-row {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            overflow-x: visible !important;
+          }
+          .featured-cards-row > div {
+            width: auto !important;
+            min-width: unset !important;
+          }
+        }
+      `}</style>
 
       <BookingModal
         isOpen={isBookingOpen}

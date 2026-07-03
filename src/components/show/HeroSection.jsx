@@ -4,23 +4,54 @@ import { Play, ArrowRight, ChevronDown } from 'lucide-react'
 
 const HERO_IMG = 'https://res.cloudinary.com/vpctcldo/image/upload/f_auto,q_auto/ChatGPT_Image_Jul_3_2026_06_39_08_PM_f0wcim'
 
-/* ── Video Modal ─────────────────────────────────────── */
+/* ─── Shared container style ─────────────────────────────── */
+const container = {
+  maxWidth: '1280px',
+  margin: '0 auto',
+  padding: '0 40px',
+}
+
+/* ── Video Modal ─────────────────────────────────────────── */
 function VideoModal({ onClose }) {
   return (
     <div
-      className="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm px-4"
+      className="modal-overlay"
       onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 50,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(0,0,0,0.88)',
+        backdropFilter: 'blur(8px)',
+        padding: '0 20px',
+      }}
     >
       <div
-        className="relative w-full max-w-3xl bg-soul-dark border border-soul-border rounded overflow-hidden shadow-card-lg"
         onClick={e => e.stopPropagation()}
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '800px',
+          background: '#111111',
+          border: '1px solid #2A2A2A',
+          borderRadius: '8px',
+          overflow: 'hidden',
+        }}
       >
-        <div className="aspect-video flex items-center justify-center bg-soul-black">
-          <div className="text-center">
-            <div className="w-20 h-20 rounded-full border border-soul-gold/60 flex items-center justify-center mx-auto mb-4">
-              <Play size={26} className="text-soul-gold ml-1" />
+        <div style={{
+          aspectRatio: '16/9',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: '#0A0A0A',
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              width: '72px', height: '72px', borderRadius: '50%',
+              border: '1px solid rgba(201,168,76,0.5)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 16px',
+            }}>
+              <Play size={24} style={{ color: '#C9A84C', marginLeft: '3px' }} />
             </div>
-            <p className="text-soul-muted text-sm" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: '#8A7A5F' }}>
               Video coming soon
             </p>
           </div>
@@ -28,7 +59,11 @@ function VideoModal({ onClose }) {
         <button
           id="video-modal-close"
           onClick={onClose}
-          className="absolute top-4 right-4 text-soul-muted hover:text-soul-cream transition-colors text-xl font-light leading-none"
+          style={{
+            position: 'absolute', top: '16px', right: '16px',
+            color: '#8A7A5F', background: 'none', border: 'none',
+            cursor: 'pointer', fontSize: '20px', lineHeight: 1,
+          }}
         >
           ✕
         </button>
@@ -37,162 +72,201 @@ function VideoModal({ onClose }) {
   )
 }
 
-/* ── Hero Section ─────────────────────────────────────── */
+/* ── Hero Section ─────────────────────────────────────────── */
 export default function HeroSection() {
   const [showVideo, setShowVideo] = useState(false)
 
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden bg-soul-black"
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
+        background: '#0A0A0A',
+      }}
     >
-      {/* ── Background image ── */}
-      <div className="absolute inset-0 z-0">
+      {/* Background */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <img
           src={HERO_IMG}
           alt="Premium vintage automobile"
-          className="w-full h-full object-cover object-center"
-          style={{ opacity: 0.7 }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.65 }}
         />
-
-        {/* Cinematic dark overlay — stronger left, fades right */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(100deg, rgba(10,10,10,0.97) 0%, rgba(10,10,10,0.82) 45%, rgba(10,10,10,0.45) 75%, rgba(10,10,10,0.25) 100%)',
-          }}
-        />
-        {/* Bottom-to-top fade for grounding */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to top, rgba(10,10,10,0.85) 0%, transparent 50%)',
-          }}
-        />
+        {/* Left overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(105deg, rgba(10,10,10,0.97) 0%, rgba(10,10,10,0.85) 40%, rgba(10,10,10,0.4) 70%, rgba(10,10,10,0.15) 100%)',
+        }} />
+        {/* Bottom fade */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 45%)',
+        }} />
         {/* Top vignette */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(10,10,10,0.35) 0%, transparent 30%)',
-          }}
-        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(10,10,10,0.4) 0%, transparent 25%)',
+        }} />
       </div>
 
-      {/* ── Content ── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 pt-28 pb-20 lg:pt-40 lg:pb-28">
-        <div className="max-w-[620px]">
+      {/* Content */}
+      <div style={{ position: 'relative', zIndex: 10, width: '100%', paddingTop: '160px', paddingBottom: '100px' }}>
+        <div style={container}>
+          <div style={{ maxWidth: '600px' }}>
 
-          {/* Eyebrow */}
-          <div className="flex items-center gap-3 mb-7">
-            <div className="h-px w-8 bg-soul-gold opacity-80" />
-            <span className="section-label">Vintage Legends. Modern Icons.</span>
-          </div>
-
-          {/* Headline — Playfair Display */}
-          <h1
-            className="font-serif font-bold leading-[1.08] text-soul-cream mb-6"
-            style={{
-              fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: 'clamp(2.6rem, 6vw, 4.5rem)',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            Timeless{' '}
-            <span className="text-gold-gradient italic">Machines.</span>
-            <br />
-            Unforgettable{' '}
-            <span className="text-gold-gradient italic">Shows.</span>
-          </h1>
-
-          {/* Subtext — Inter */}
-          <p
-            className="text-soul-muted leading-relaxed mb-10"
-            style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)',
-              maxWidth: '480px',
-              lineHeight: '1.75',
-            }}
-          >
-            OldSoul connects vehicle owners with auto shows, events, and
-            exhibitions. List your ride. Get booked. Be remembered.
-          </p>
-
-          {/* CTA row */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              id="hero-browse-btn"
-              to="/browse"
-              className="btn-gold inline-flex items-center justify-center gap-2"
-              style={{ fontSize: '0.85rem', letterSpacing: '0.06em' }}
-            >
-              Browse Vehicles
-              <ArrowRight size={15} />
-            </Link>
-
-            <button
-              id="hero-video-btn"
-              onClick={() => setShowVideo(true)}
-              className="inline-flex items-center justify-center gap-3 px-6 py-3 rounded-sm border border-soul-border/70 text-soul-cream/80 hover:border-soul-gold hover:text-soul-gold transition-all duration-300"
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '0.85rem',
-                fontWeight: 500,
-                letterSpacing: '0.04em',
-              }}
-            >
-              <span className="w-8 h-8 rounded-full border border-soul-gold/50 flex items-center justify-center flex-shrink-0">
-                <Play size={11} className="text-soul-gold ml-0.5" />
+            {/* Eyebrow */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+              <div style={{ height: '1px', width: '32px', background: '#C9A84C', opacity: 0.8 }} />
+              <span style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.62rem',
+                fontWeight: 600,
+                letterSpacing: '0.26em',
+                textTransform: 'uppercase',
+                color: '#C9A84C',
+              }}>
+                Vintage Legends. Modern Icons.
               </span>
-              Watch Video
-            </button>
-          </div>
+            </div>
 
-          {/* Stats row */}
-          <div
-            className="flex flex-wrap gap-10 mt-14 pt-8"
-            style={{ borderTop: '1px solid rgba(42,42,42,0.6)' }}
-          >
-            {[
-              { value: '500+', label: 'Vehicles Listed' },
-              { value: '80+',  label: 'Events Hosted' },
-              { value: '12+',  label: 'Cities Covered' },
-            ].map(({ value, label }) => (
-              <div key={label}>
-                <p
-                  className="font-serif font-bold text-soul-gold"
-                  style={{
+            {/* Headline */}
+            <h1 style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: 'clamp(2.8rem, 5.5vw, 4.5rem)',
+              fontWeight: 700,
+              lineHeight: 1.08,
+              letterSpacing: '-0.01em',
+              color: '#F5EDD6',
+              marginBottom: '24px',
+            }}>
+              Timeless{' '}
+              <span style={{
+                background: 'linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontStyle: 'italic',
+              }}>
+                Machines.
+              </span>
+              <br />
+              Unforgettable{' '}
+              <span style={{
+                background: 'linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontStyle: 'italic',
+              }}>
+                Shows.
+              </span>
+            </h1>
+
+            {/* Subtext */}
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '1rem',
+              lineHeight: 1.75,
+              color: '#8A7A5F',
+              maxWidth: '440px',
+              marginBottom: '40px',
+            }}>
+              OldSoul connects vehicle owners with auto shows, events, and
+              exhibitions. List your ride. Get booked. Be remembered.
+            </p>
+
+            {/* CTAs */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '56px' }}>
+              <Link
+                id="hero-browse-btn"
+                to="/browse"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '8px',
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.82rem',
+                  fontWeight: 600, letterSpacing: '0.06em',
+                  padding: '12px 28px',
+                  background: '#C9A84C', color: '#0A0A0A',
+                  border: 'none', borderRadius: '4px',
+                  textDecoration: 'none', cursor: 'pointer',
+                  transition: 'background 0.2s ease',
+                }}
+              >
+                Browse Vehicles
+                <ArrowRight size={15} />
+              </Link>
+
+              <button
+                id="hero-video-btn"
+                onClick={() => setShowVideo(true)}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '12px',
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.82rem',
+                  fontWeight: 500, letterSpacing: '0.04em',
+                  padding: '12px 24px',
+                  background: 'transparent', color: 'rgba(245,237,214,0.8)',
+                  border: '1px solid rgba(42,42,42,0.8)', borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'border-color 0.2s ease, color 0.2s ease',
+                }}
+              >
+                <span style={{
+                  width: '32px', height: '32px', borderRadius: '50%',
+                  border: '1px solid rgba(201,168,76,0.5)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <Play size={11} style={{ color: '#C9A84C', marginLeft: '2px' }} />
+                </span>
+                Watch Video
+              </button>
+            </div>
+
+            {/* Stats */}
+            <div style={{
+              display: 'flex', flexWrap: 'wrap', gap: '40px',
+              paddingTop: '32px',
+              borderTop: '1px solid rgba(42,42,42,0.6)',
+            }}>
+              {[
+                { value: '500+', label: 'Vehicles Listed' },
+                { value: '80+',  label: 'Events Hosted' },
+                { value: '12+',  label: 'Cities Covered' },
+              ].map(({ value, label }) => (
+                <div key={label}>
+                  <p style={{
                     fontFamily: "'Playfair Display', Georgia, serif",
-                    fontSize: '1.6rem',
-                    lineHeight: 1,
-                  }}
-                >
-                  {value}
-                </p>
-                <p
-                  className="text-soul-muted mt-1"
-                  style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontSize: '0.72rem',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {label}
-                </p>
-              </div>
-            ))}
+                    fontSize: '1.7rem', fontWeight: 700,
+                    lineHeight: 1, color: '#C9A84C',
+                  }}>
+                    {value}
+                  </p>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '0.68rem', fontWeight: 500,
+                    letterSpacing: '0.14em', textTransform: 'uppercase',
+                    color: '#8A7A5F', marginTop: '6px',
+                  }}>
+                    {label}
+                  </p>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5">
+      <div style={{
+        position: 'absolute', bottom: '32px',
+        left: '50%', transform: 'translateX(-50%)',
+        zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+      }}>
         <div className="scroll-indicator-line" />
-        <ChevronDown size={16} className="text-soul-muted/50" />
+        <ChevronDown size={16} style={{ color: 'rgba(138,122,95,0.5)' }} />
       </div>
 
       {showVideo && <VideoModal onClose={() => setShowVideo(false)} />}

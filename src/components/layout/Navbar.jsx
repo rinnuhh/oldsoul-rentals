@@ -80,7 +80,7 @@ export default function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400
         ${scrolled ? 'bg-glass-dark border-b border-soul-border shadow-card' : 'bg-transparent'}`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 40px' }}>
         <div className="flex items-center justify-between h-16 lg:h-20">
 
           {/* Logo */}

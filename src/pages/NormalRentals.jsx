@@ -3,65 +3,117 @@ import { ArrowRight, Car, Shield, Clock, MapPin } from 'lucide-react'
 import RentalGrid from '../components/normal/RentalGrid'
 
 const highlights = [
-  { Icon: Car,    label: 'Wide Selection',    desc: 'Cars, Bikes, SUVs & Vans' },
-  { Icon: Shield, label: 'Insured Vehicles',  desc: 'Drive with full peace of mind' },
-  { Icon: Clock,  label: 'Flexible Booking',  desc: 'Hourly, daily, or weekly plans' },
-  { Icon: MapPin, label: 'City-wide Coverage',desc: 'Available across major cities' },
+  { Icon: Car,    label: 'Diverse Fleet',     desc: 'Sedans, SUVs, Premium Hatchbacks' },
+  { Icon: Shield, label: 'Fully Insured',     desc: 'Zero liability option available' },
+  { Icon: Clock,  label: 'Instant Booking',   desc: 'Flexible hours & direct pick-up' },
+  { Icon: MapPin, label: 'City Coverage',    desc: 'Pick up points across key hubs' },
 ]
 
 export default function NormalRentals() {
   return (
-    <div className="bg-rental-bg min-h-screen">
-
-      {/* Hero */}
-      <section className="bg-white border-b border-rental-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
-            {/* Left copy */}
+    <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingTop: '80px' }}>
+      
+      {/* ── Hero Banner ── */}
+      <section style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', padding: '64px 0 0 0' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 40px' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '48px',
+            alignItems: 'center',
+            paddingBottom: '56px',
+          }}>
+            {/* Left Copy */}
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-xs font-semibold tracking-widest text-rental-muted uppercase">
-                  Vehicles Available Now
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#16A34A', display: 'inline-block' }} />
+                <span style={{
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.62rem',
+                  fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
+                  color: '#64748B',
+                }}>
+                  Fleet Status: Ready to Rent
                 </span>
               </div>
-              <h1 className="font-serif font-bold text-3xl sm:text-4xl lg:text-5xl text-rental-text leading-tight mb-4">
-                Rent Any Vehicle,
+              
+              <h1 style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
+                fontWeight: 700, lineHeight: 1.15,
+                color: '#0F172A', marginBottom: '18px',
+              }}>
+                Drive Your Way.{' '}
                 <br />
-                <span className="text-rental-blue">Anytime. Anywhere.</span>
+                <span style={{ color: '#2563EB' }}>Everyday Rentals.</span>
               </h1>
-              <p className="text-rental-muted text-base leading-relaxed mb-8 max-w-lg">
-                From daily commutes to weekend getaways — find the perfect vehicle
-                with transparent pricing, instant confirmation, and zero hassle.
+              
+              <p style={{
+                fontFamily: 'Inter, sans-serif', fontSize: '0.92rem',
+                lineHeight: 1.68, color: '#475569',
+                maxWidth: '460px', marginBottom: '32px',
+              }}>
+                Premium sedans, family SUVs, and city commuters at transparent pricing. Enjoy instant keys, full insurance, and zero hidden costs.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a href="#vehicle-listings" className="btn-primary-rental text-sm flex items-center justify-center gap-2">
-                  Browse Vehicles <ArrowRight size={15} />
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                <a
+                  href="#vehicle-listings"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '8px',
+                    fontFamily: 'Inter, sans-serif', fontSize: '0.8rem',
+                    fontWeight: 600, padding: '12px 24px',
+                    background: '#2563EB', color: '#FFFFFF',
+                    borderRadius: '6px', textDecoration: 'none',
+                    transition: 'background 0.2s',
+                  }}
+                  className="rental-hero-btn"
+                >
+                  Browse Fleet <ArrowRight size={14} />
                 </a>
-                <Link to="/" className="border border-rental-border text-rental-muted text-sm font-medium
-                                         px-5 py-3 rounded-lg hover:border-rental-navy hover:text-rental-navy
-                                         transition-colors text-center">
-                  ← Show Rentals
+                <Link
+                  to="/"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center',
+                    fontFamily: 'Inter, sans-serif', fontSize: '0.8rem',
+                    fontWeight: 500, padding: '12px 20px',
+                    border: '1px solid #CBD5E1', color: '#475569',
+                    borderRadius: '6px', textDecoration: 'none',
+                    transition: 'border-color 0.2s',
+                  }}
+                  className="rental-sec-btn"
+                >
+                  ← Show Vehicles
                 </Link>
               </div>
             </div>
 
-            {/* Right image */}
-            <div className="relative rounded-2xl overflow-hidden h-64 lg:h-80 shadow-lg">
+            {/* Right Image Display */}
+            <div style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', height: '320px', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.1)' }}>
               <img
                 src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1000&q=80"
-                alt="Vehicle rental fleet"
-                className="w-full h-full object-cover"
+                alt="Modern vehicle fleet"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-rental-navy/30 to-transparent" />
-              {/* Floating stat card */}
-              <div className="absolute bottom-4 left-4 bg-white rounded-xl px-4 py-3 shadow-md flex items-center gap-3">
-                <div className="w-10 h-10 bg-rental-blue-light rounded-lg flex items-center justify-center">
-                  <Car size={18} className="text-rental-blue" />
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(to top, rgba(15,23,42,0.4) 0%, transparent 100%)',
+              }} />
+              {/* Floating Badge */}
+              <div style={{
+                position: 'absolute', bottom: '20px', left: '20px',
+                background: '#FFFFFF', borderRadius: '6px',
+                padding: '12px 18px', display: 'flex', alignItems: 'center', gap: '12px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+              }}>
+                <div style={{
+                  width: '36px', height: '36px', borderRadius: '4px',
+                  background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Car size={16} style={{ color: '#2563EB' }} />
                 </div>
                 <div>
-                  <p className="font-bold text-rental-text text-sm">250+ Vehicles</p>
-                  <p className="text-rental-muted text-xs">Ready to book</p>
+                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: '#0F172A', margin: 0 }}>250+ Autos</p>
+                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.67rem', color: '#64748B', margin: 0 }}>Clean & fully serviced</p>
                 </div>
               </div>
             </div>
@@ -69,17 +121,21 @@ export default function NormalRentals() {
         </div>
 
         {/* Highlights strip */}
-        <div className="border-t border-rental-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div style={{ borderTop: '1px solid #E2E8F0', background: '#F8FAFC' }}>
+          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '24px 40px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               {highlights.map(({ Icon, label, desc }) => (
-                <div key={label} className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-rental-blue-light rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Icon size={16} className="text-rental-blue" />
+                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{
+                    width: '36px', height: '36px', borderRadius: '6px',
+                    background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <Icon size={15} style={{ color: '#2563EB' }} />
                   </div>
                   <div>
-                    <p className="text-rental-text text-xs font-semibold">{label}</p>
-                    <p className="text-rental-muted text-[11px]">{desc}</p>
+                    <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600, color: '#0F172A', margin: 0 }}>{label}</p>
+                    <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.68rem', color: '#64748B', margin: 0 }}>{desc}</p>
                   </div>
                 </div>
               ))}
@@ -88,10 +144,16 @@ export default function NormalRentals() {
         </div>
       </section>
 
-      {/* Vehicle grid */}
+      {/* ── Vehicle listings ── */}
       <section id="vehicle-listings">
         <RentalGrid />
       </section>
+
+      <style>{`
+        .rental-hero-btn:hover { background-color: #1D4ED8 !important; }
+        .rental-sec-btn:hover { border-color: #94A3B8 !important; color: #0F172A !important; }
+      `}</style>
+
     </div>
   )
 }

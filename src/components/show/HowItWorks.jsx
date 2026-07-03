@@ -1,4 +1,10 @@
-import { Search, Calendar, CheckCircle2, Wallet } from 'lucide-react'
+import { Search, Calendar, Trophy, Wallet } from 'lucide-react'
+
+const container = {
+  maxWidth: '1280px',
+  margin: '0 auto',
+  padding: '0 40px',
+}
 
 const steps = [
   {
@@ -15,7 +21,7 @@ const steps = [
   },
   {
     num: '03',
-    Icon: CheckCircle2,
+    Icon: Trophy,
     title: 'Show & Shine',
     desc: 'Your vehicle takes the spotlight. You create memories.',
   },
@@ -31,97 +37,113 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-20 lg:py-28"
-      style={{
-        background: 'linear-gradient(180deg, #0f0f0f 0%, #111111 100%)',
-        borderTop: '1px solid rgba(42,42,42,0.6)',
-        borderBottom: '1px solid rgba(42,42,42,0.6)',
-      }}
+      style={{ background: '#F0E6CC', padding: '96px 0' }}
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <div style={container}>
 
         {/* Header */}
-        <div className="text-center mb-16">
-          <p className="section-label mb-4">How OldSoul Works</p>
-          <h2
-            className="font-serif text-soul-cream"
-            style={{
-              fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: 'clamp(1.7rem, 4vw, 2.75rem)',
-              fontWeight: 700,
-              lineHeight: 1.2,
-            }}
-          >
+        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.6rem',
+            fontWeight: 600,
+            letterSpacing: '0.28em',
+            textTransform: 'uppercase',
+            color: '#8A7A5F',
+            marginBottom: '14px',
+          }}>
+            How OldSoul Works
+          </p>
+          <h2 style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: 'clamp(1.9rem, 3.8vw, 2.75rem)',
+            fontWeight: 700,
+            lineHeight: 1.2,
+            color: '#1A1208',
+          }}>
             Simple Steps.{' '}
-            <span className="text-gold-gradient italic">Seamless Experience.</span>
+            <span style={{
+              background: 'linear-gradient(135deg, #C9A84C 0%, #E8C96A 55%, #C9A84C 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontStyle: 'italic',
+            }}>
+              Seamless Experience.
+            </span>
           </h2>
         </div>
 
-        {/* Steps grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 relative">
-          {/* Connecting line (desktop) */}
-          <div
-            className="hidden lg:block absolute z-0"
-            style={{
-              top: '44px',
-              left: '12.5%',
-              right: '12.5%',
-              height: '1px',
-              background: 'linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent)',
-            }}
-          />
-
-          {steps.map(({ num, Icon, title, desc }, i) => (
+        {/* Step cards */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: '20px',
+        }}>
+          {steps.map(({ num, Icon, title, desc }) => (
             <div
               key={num}
-              className="relative z-10 group bg-soul-card border border-soul-border p-6 hover:border-soul-gold/30 transition-all duration-300"
-              style={{ borderRadius: '6px' }}
+              style={{
+                position: 'relative',
+                background: '#1A1208',
+                border: '1px solid rgba(42,30,8,0.5)',
+                borderRadius: '8px',
+                padding: '32px 28px',
+                textAlign: 'left',
+              }}
             >
-              {/* Step number — top-right watermark */}
-              <span
-                className="absolute top-4 right-4 text-soul-gold/20 font-mono select-none"
-                style={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.1em',
-                }}
-              >
+              {/* Step number watermark */}
+              <span style={{
+                position: 'absolute',
+                top: '16px',
+                right: '18px',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.65rem',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                color: 'rgba(201,168,76,0.2)',
+                userSelect: 'none',
+              }}>
                 {num}
               </span>
 
               {/* Icon circle */}
-              <div
-                className="mb-5 flex items-center justify-center bg-soul-black border border-soul-border group-hover:border-soul-gold/40 group-hover:shadow-gold-sm transition-all duration-300"
-                style={{ width: '52px', height: '52px', borderRadius: '50%' }}
-              >
-                <Icon size={20} className="text-soul-gold" />
+              <div style={{
+                width: '52px', height: '52px',
+                borderRadius: '50%',
+                background: '#0A0A0A',
+                border: '1px solid rgba(201,168,76,0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '20px',
+              }}>
+                <Icon size={20} style={{ color: '#C9A84C' }} />
               </div>
 
-              <h3
-                className="text-soul-cream group-hover:text-soul-gold transition-colors duration-200 mb-2"
-                style={{
-                  fontFamily: "'Playfair Display', Georgia, serif",
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  lineHeight: 1.3,
-                }}
-              >
+              <h3 style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize: '1rem',
+                fontWeight: 600,
+                lineHeight: 1.3,
+                color: '#F5EDD6',
+                marginBottom: '10px',
+              }}>
                 {title}
               </h3>
-              <p
-                className="text-soul-muted leading-relaxed"
-                style={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '0.82rem',
-                  lineHeight: 1.7,
-                }}
-              >
+
+              <p style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.8rem',
+                lineHeight: 1.72,
+                color: '#8A7A5F',
+              }}>
                 {desc}
               </p>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   )

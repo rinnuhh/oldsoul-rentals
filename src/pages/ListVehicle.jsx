@@ -1,11 +1,31 @@
 import { useState } from 'react'
-import { Car, Upload, MapPin, Phone, CheckCircle2 } from 'lucide-react'
+import { Car, Upload, MapPin, Phone, CheckCircle2, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const vehicleCategories = ['Vintage Car', 'Vintage Bike', 'Modern Car', 'Modified Car', 'Classic Truck', 'Other']
 
+const container = {
+  maxWidth: '800px',
+  margin: '0 auto',
+  padding: '0 40px',
+}
+
+const inputStyle = {
+  width: '100%',
+  background: '#0A0A0A',
+  border: '1px solid #2A2A2A',
+  borderRadius: '4px',
+  padding: '12px 14px',
+  fontSize: '0.85rem',
+  fontFamily: 'Inter, sans-serif',
+  color: '#F5EDD6',
+  outline: 'none',
+  transition: 'border-color 0.25s, box-shadow 0.25s',
+}
+
 export default function ListVehicle() {
   const [submitted, setSubmitted] = useState(false)
+  const [dragActive, setDragActive] = useState(false)
   const [form, setForm] = useState({
     name: '', phone: '', email: '',
     vehicleName: '', year: '', category: '', location: '',
@@ -24,80 +44,190 @@ export default function ListVehicle() {
 
   if (submitted) {
     return (
-      <div className="bg-soul-black min-h-screen pt-24 flex items-center justify-center px-4">
-        <div className="text-center max-w-md">
-          <div className="w-20 h-20 rounded-full bg-soul-gold/10 border-2 border-soul-gold flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 size={36} className="text-soul-gold" />
+      <div className="bg-soul-black min-h-screen pt-32 pb-20 flex items-center justify-center px-4">
+        <div style={{
+          background: '#111111',
+          border: '1px solid #2A2A2A',
+          borderRadius: '8px',
+          padding: '48px 32px',
+          maxWidth: '440px',
+          width: '100%',
+          textAlign: 'center',
+        }}>
+          <div style={{
+            width: '64px', height: '64px', borderRadius: '50%',
+            background: 'rgba(201,168,76,0.08)',
+            border: '1px solid rgba(201,168,76,0.3)',
+            display: 'flex', alignItems: 'center', justifySelf: 'center', justifyContent: 'center',
+            margin: '0 auto 24px',
+          }}>
+            <CheckCircle2 size={28} style={{ color: '#C9A84C' }} />
           </div>
-          <h2 className="font-serif font-bold text-3xl text-soul-cream mb-4">Listing Submitted!</h2>
-          <p className="text-soul-muted mb-8">
-            Our team will review your vehicle and get back to you within 24 hours.
-            Welcome to the OldSoul family! 🏆
+          <h2 style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: '1.8rem', fontWeight: 700,
+            color: '#F5EDD6', marginBottom: '14px',
+          }}>
+            Listing Submitted
+          </h2>
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.85rem', lineHeight: 1.65,
+            color: '#8A7A5F', marginBottom: '32px',
+          }}>
+            Our curators will review your submission and contact you within 24 hours. Welcome to the OldSoul circle.
           </p>
-          <Link to="/" className="btn-gold">Back to Home</Link>
+          <Link
+            to="/"
+            style={{
+              display: 'inline-block',
+              fontFamily: 'Inter, sans-serif', fontSize: '0.78rem',
+              fontWeight: 600, letterSpacing: '0.08em',
+              textTransform: 'uppercase', textDecoration: 'none',
+              padding: '12px 32px', background: '#C9A84C', color: '#0A0A0A',
+              borderRadius: '4px',
+            }}
+          >
+            Return Home
+          </Link>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="bg-soul-black min-h-screen pt-20 lg:pt-24 pb-16">
-
+    <div className="bg-soul-black min-h-screen pt-28 lg:pt-32 pb-24">
       {/* Header */}
-      <div className="bg-soul-dark border-b border-soul-border py-12">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="section-label mb-3">Join the Community</p>
-          <h1 className="font-serif font-bold text-3xl sm:text-4xl text-soul-cream mb-3">
-            List Your <span className="text-gold-gradient italic">Vehicle</span>
+      <div style={{ marginBottom: '48px' }}>
+        <div style={container}>
+          <Link
+            to="/"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              fontFamily: 'Inter, sans-serif', fontSize: '0.78rem',
+              color: '#8A7A5F', textDecoration: 'none', marginBottom: '24px',
+            }}
+          >
+            <ArrowLeft size={14} /> Back to Showcase
+          </Link>
+          
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.62rem', fontWeight: 600,
+            letterSpacing: '0.26em', textTransform: 'uppercase',
+            color: '#C9A84C', marginBottom: '10px',
+          }}>
+            Join the Circle
+          </p>
+          <h1 style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: 'clamp(2.2rem, 4vw, 3rem)',
+            fontWeight: 700, color: '#F5EDD6', margin: 0,
+          }}>
+            List Your{' '}
+            <span style={{
+              background: 'linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontStyle: 'italic',
+            }}>
+              Automobile
+            </span>
           </h1>
-          <p className="text-soul-muted">
-            Fill in the details below and our team will verify your listing within 24 hours.
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.88rem', color: '#8A7A5F',
+            marginTop: '10px', maxWidth: '480px', lineHeight: 1.6,
+          }}>
+            Connect with premium auto shows, production houses, and enthusiasts. Share your passion, represent the culture.
           </p>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-
-          {/* Owner Info */}
-          <div className="bg-soul-card border border-soul-border rounded-sm p-6">
-            <h2 className="text-soul-cream font-semibold text-sm mb-5 flex items-center gap-2">
-              <Phone size={15} className="text-soul-gold" /> Owner Information
+      {/* Form Area */}
+      <div style={container}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          
+          {/* Card 1: Owner */}
+          <div style={{
+            background: '#111111',
+            border: '1px solid #2A2A2A',
+            borderRadius: '6px',
+            padding: '32px',
+          }}>
+            <h2 style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: '1.1rem', fontWeight: 600,
+              color: '#F5EDD6', marginBottom: '24px',
+              display: 'flex', alignItems: 'center', gap: '10px',
+            }}>
+              <Phone size={16} style={{ color: '#C9A84C' }} /> Contact Details
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { id: 'form-owner-name',  name: 'name',  label: 'Full Name',     type: 'text',  placeholder: 'Rajan Nair' },
-                { id: 'form-owner-phone', name: 'phone', label: 'Phone Number',  type: 'tel',   placeholder: '+91 98765 43210' },
-                { id: 'form-owner-email', name: 'email', label: 'Email Address', type: 'email', placeholder: 'rajan@example.com', full: true },
-              ].map(({ id, name, label, type, placeholder, full }) => (
-                <div key={id} className={full ? 'sm:col-span-2' : ''}>
-                  <label htmlFor={id} className="block text-soul-muted text-xs mb-1.5">{label}</label>
-                  <input
-                    id={id}
-                    name={name}
-                    type={type}
-                    required
-                    placeholder={placeholder}
-                    value={form[name]}
-                    onChange={handleChange}
-                    className="w-full bg-soul-black border border-soul-border rounded-sm px-3 py-2.5
-                               text-sm text-soul-cream placeholder-soul-smoke focus:outline-none
-                               focus:border-soul-gold transition-colors"
-                  />
-                </div>
-              ))}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+              <div>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">Full Name</label>
+                <input
+                  id="form-owner-name"
+                  name="name"
+                  type="text"
+                  required
+                  placeholder="Rajan Nair"
+                  value={form.name}
+                  onChange={handleChange}
+                  style={inputStyle}
+                  className="focus-ring"
+                />
+              </div>
+              <div>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">Phone Number</label>
+                <input
+                  id="form-owner-phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  placeholder="+91 98765 43210"
+                  value={form.phone}
+                  onChange={handleChange}
+                  style={inputStyle}
+                  className="focus-ring"
+                />
+              </div>
+              <div style={{ gridColumn: '1 / -1' }}>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">Email Address</label>
+                <input
+                  id="form-owner-email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="rajan@example.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  style={inputStyle}
+                  className="focus-ring"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Vehicle Info */}
-          <div className="bg-soul-card border border-soul-border rounded-sm p-6">
-            <h2 className="text-soul-cream font-semibold text-sm mb-5 flex items-center gap-2">
-              <Car size={15} className="text-soul-gold" /> Vehicle Details
+          {/* Card 2: Vehicle */}
+          <div style={{
+            background: '#111111',
+            border: '1px solid #2A2A2A',
+            borderRadius: '6px',
+            padding: '32px',
+          }}>
+            <h2 style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: '1.1rem', fontWeight: 600,
+              color: '#F5EDD6', marginBottom: '24px',
+              display: 'flex', alignItems: 'center', gap: '10px',
+            }}>
+              <Car size={16} style={{ color: '#C9A84C' }} /> Vehicle Details
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
               <div>
-                <label htmlFor="form-vehicle-name" className="block text-soul-muted text-xs mb-1.5">Vehicle Name / Model</label>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">Vehicle Model Name</label>
                 <input
                   id="form-vehicle-name"
                   name="vehicleName"
@@ -106,43 +236,43 @@ export default function ListVehicle() {
                   placeholder="e.g. Mercedes-Benz 220S"
                   value={form.vehicleName}
                   onChange={handleChange}
-                  className="w-full bg-soul-black border border-soul-border rounded-sm px-3 py-2.5
-                             text-sm text-soul-cream placeholder-soul-smoke focus:outline-none focus:border-soul-gold transition-colors"
+                  style={inputStyle}
+                  className="focus-ring"
                 />
               </div>
               <div>
-                <label htmlFor="form-vehicle-year" className="block text-soul-muted text-xs mb-1.5">Year of Manufacture</label>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">Year of Manufacture</label>
                 <input
                   id="form-vehicle-year"
                   name="year"
                   type="number"
                   required
                   min="1900"
-                  max="2025"
+                  max="2026"
                   placeholder="e.g. 1967"
                   value={form.year}
                   onChange={handleChange}
-                  className="w-full bg-soul-black border border-soul-border rounded-sm px-3 py-2.5
-                             text-sm text-soul-cream placeholder-soul-smoke focus:outline-none focus:border-soul-gold transition-colors"
+                  style={inputStyle}
+                  className="focus-ring"
                 />
               </div>
               <div>
-                <label htmlFor="form-vehicle-category" className="block text-soul-muted text-xs mb-1.5">Category</label>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">Classification</label>
                 <select
                   id="form-vehicle-category"
                   name="category"
                   required
                   value={form.category}
                   onChange={handleChange}
-                  className="w-full bg-soul-black border border-soul-border rounded-sm px-3 py-2.5
-                             text-sm text-soul-cream focus:outline-none focus:border-soul-gold transition-colors cursor-pointer"
+                  style={{ ...inputStyle, cursor: 'pointer', appearance: 'none' }}
+                  className="focus-ring"
                 >
-                  <option value="">Select category</option>
-                  {vehicleCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                  <option value="" style={{ background: '#111' }}>Select category</option>
+                  {vehicleCategories.map(c => <option key={c} value={c} style={{ background: '#111' }}>{c}</option>)}
                 </select>
               </div>
               <div>
-                <label htmlFor="form-vehicle-price" className="block text-soul-muted text-xs mb-1.5">Price per Day (₹)</label>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">Desired Price per Day (₹)</label>
                 <input
                   id="form-vehicle-price"
                   name="pricePerDay"
@@ -151,14 +281,14 @@ export default function ListVehicle() {
                   placeholder="e.g. 8000"
                   value={form.pricePerDay}
                   onChange={handleChange}
-                  className="w-full bg-soul-black border border-soul-border rounded-sm px-3 py-2.5
-                             text-sm text-soul-cream placeholder-soul-smoke focus:outline-none focus:border-soul-gold transition-colors"
+                  style={inputStyle}
+                  className="focus-ring"
                 />
               </div>
-              <div className="sm:col-span-2">
-                <label htmlFor="form-vehicle-location" className="block text-soul-muted text-xs mb-1.5">Location (City, State)</label>
-                <div className="relative">
-                  <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-soul-muted" />
+              <div style={{ gridColumn: '1 / -1' }}>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">City / Location</label>
+                <div style={{ position: 'relative' }}>
+                  <MapPin size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#8A7A5F' }} />
                   <input
                     id="form-vehicle-location"
                     name="location"
@@ -167,37 +297,59 @@ export default function ListVehicle() {
                     placeholder="e.g. Kochi, Kerala"
                     value={form.location}
                     onChange={handleChange}
-                    className="w-full pl-8 bg-soul-black border border-soul-border rounded-sm px-3 py-2.5
-                               text-sm text-soul-cream placeholder-soul-smoke focus:outline-none focus:border-soul-gold transition-colors"
+                    style={{ ...inputStyle, paddingLeft: '36px' }}
+                    className="focus-ring"
                   />
                 </div>
               </div>
-              <div className="sm:col-span-2">
-                <label htmlFor="form-vehicle-desc" className="block text-soul-muted text-xs mb-1.5">Description & Conditions</label>
+              <div style={{ gridColumn: '1 / -1' }}>
+                <label className="block text-soul-muted text-xs mb-1.5 font-medium tracking-wide uppercase">History & Special Specs</label>
                 <textarea
                   id="form-vehicle-desc"
                   name="description"
                   rows={4}
-                  placeholder="Describe your vehicle, its history, special features, and any conditions for booking..."
+                  placeholder="Tell us about the vehicle's heritage, custom modifications, display history..."
                   value={form.description}
                   onChange={handleChange}
-                  className="w-full bg-soul-black border border-soul-border rounded-sm px-3 py-2.5
-                             text-sm text-soul-cream placeholder-soul-smoke focus:outline-none
-                             focus:border-soul-gold transition-colors resize-none"
+                  style={{ ...inputStyle, resize: 'none' }}
+                  className="focus-ring"
                 />
               </div>
             </div>
           </div>
 
-          {/* Photo upload placeholder */}
-          <div className="bg-soul-card border border-dashed border-soul-border rounded-sm p-8 text-center hover:border-soul-gold/50 transition-colors cursor-pointer">
-            <Upload size={24} className="text-soul-muted mx-auto mb-3" />
-            <p className="text-soul-cream text-sm font-medium mb-1">Upload Vehicle Photos</p>
-            <p className="text-soul-muted text-xs">Drag & drop or click to upload (JPG, PNG — max 10 MB each)</p>
+          {/* Card 3: Photo Upload */}
+          <div
+            onDragOver={e => { e.preventDefault(); setDragActive(true); }}
+            onDragLeave={() => setDragActive(false)}
+            onDrop={e => { e.preventDefault(); setDragActive(false); }}
+            style={{
+              background: dragActive ? 'rgba(201,168,76,0.04)' : '#111111',
+              border: dragActive ? '1px dashed #C9A84C' : '1px dashed #2A2A2A',
+              borderRadius: '6px',
+              padding: '48px 32px',
+              textAlign: 'center',
+              cursor: 'pointer',
+              transition: 'border-color 0.25s, background 0.25s',
+            }}
+          >
+            <Upload size={24} style={{ color: '#8A7A5F', margin: '0 auto 16px' }} />
+            <p style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.85rem',
+              fontWeight: 600, color: '#F5EDD6', marginBottom: '6px',
+            }}>
+              Upload High Resolution Photos
+            </p>
+            <p style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.72rem',
+              color: '#8A7A5F',
+            }}>
+              Drag and drop files, or click to browse. Max 10MB per file.
+            </p>
           </div>
 
-          {/* Terms */}
-          <label className="flex items-start gap-3 cursor-pointer">
+          {/* Verification terms */}
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', margin: '8px 0' }}>
             <input
               id="form-terms-checkbox"
               name="terms"
@@ -205,25 +357,50 @@ export default function ListVehicle() {
               required
               checked={form.terms}
               onChange={handleChange}
-              className="mt-0.5 accent-soul-gold"
+              style={{ accentColor: '#C9A84C', marginTop: '3px' }}
             />
-            <span className="text-soul-muted text-sm leading-relaxed">
-              I agree to OldSoul's{' '}
-              <Link to="/" className="text-soul-gold underline hover:text-soul-gold-light">Terms & Conditions</Link>
-              {' '}and confirm that I own or have legal authority to list this vehicle.
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', lineHeight: 1.5, color: '#8A7A5F' }}>
+              I certify that I am the owner or authorized representative of this automobile and agree to OldSoul's{' '}
+              <Link to="/" style={{ color: '#C9A84C', textDecoration: 'none' }}>Community Standards</Link>.
             </span>
           </label>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             id="form-submit-btn"
             type="submit"
-            className="btn-gold w-full py-3.5 text-sm font-semibold tracking-wide"
+            style={{
+              width: '100%',
+              background: '#C9A84C',
+              color: '#0A0A0A',
+              border: 'none',
+              borderRadius: '4px',
+              padding: '16px',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.82rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s',
+            }}
+            className="submit-btn"
           >
-            Submit Listing for Review
+            Submit Listing for Verification
           </button>
+
         </form>
       </div>
+
+      <style>{`
+        .focus-ring:focus {
+          border-color: rgba(201, 168, 76, 0.6) !important;
+          box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1) !important;
+        }
+        .submit-btn:hover {
+          background-color: #E8C96A !important;
+        }
+      `}</style>
     </div>
   )
 }

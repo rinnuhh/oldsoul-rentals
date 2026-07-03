@@ -1,110 +1,104 @@
 import { useState } from 'react'
 import { Mail, Phone, MapPin, Send, CheckCircle2, Clock } from 'lucide-react'
 
+const C = { maxWidth: '1280px', margin: '0 auto', padding: '0 40px' }
+
+const inputStyle = {
+  width: '100%',
+  background: '#0A0A0A',
+  border: '1px solid #2A2A2A',
+  borderRadius: '4px',
+  padding: '11px 14px',
+  fontFamily: 'Inter, sans-serif',
+  fontSize: '0.83rem',
+  color: '#F5EDD6',
+  outline: 'none',
+  transition: 'border-color 0.2s',
+}
+
+const contactInfo = [
+  {
+    Icon: MapPin,
+    title: 'Location',
+    value: 'Building 14, Old Port Road, Fort Kochi, Kerala — 682001',
+    href: 'https://maps.google.com',
+  },
+  {
+    Icon: Phone,
+    title: 'Phone',
+    value: '+91 98765 43210',
+    href: 'tel:+919876543210',
+  },
+  {
+    Icon: Mail,
+    title: 'Email',
+    value: 'hello@oldsoul.in',
+    href: 'mailto:hello@oldsoul.in',
+  },
+  {
+    Icon: Clock,
+    title: 'Hours',
+    value: 'Mon – Sat: 9:00 AM – 6:00 PM IST',
+    href: null,
+  },
+]
+
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    role: 'renter',
-    message: '',
-  })
+  const [form, setForm] = useState({ name: '', email: '', subject: '', role: 'renter', message: '' })
   const [submitted, setSubmitted] = useState(false)
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setSubmitted(true)
-  }
-
-  const handleReset = () => {
-    setSubmitted(false)
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      role: 'renter',
-      message: '',
-    })
-  }
+  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
+  const handleSubmit = e => { e.preventDefault(); setSubmitted(true) }
 
   return (
-    <div className="bg-soul-black min-h-screen pt-20 lg:pt-24 text-soul-cream">
-      
-      {/* Header */}
-      <section className="bg-soul-dark border-b border-soul-border py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="section-label mb-3">Get In Touch</p>
-          <h1 className="font-serif font-bold text-4xl sm:text-5xl text-soul-cream mb-4">
-            Connect With <span className="text-gold-gradient italic">OldSoul</span>
+    <div style={{ background: '#0A0A0A', minHeight: '100vh', paddingTop: '96px', paddingBottom: '96px', color: '#F5EDD6' }}>
+
+      {/* ── Hero Header ── */}
+      <div style={{ background: '#111111', borderBottom: '1px solid #2A2A2A', padding: '64px 0' }}>
+        <div style={{ ...C, textAlign: 'center' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '12px' }}>
+            Get In Touch
+          </p>
+          <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2.4rem, 4.5vw, 3.5rem)', fontWeight: 700, lineHeight: 1.1, color: '#F5EDD6', marginBottom: '16px' }}>
+            Connect With{' '}
+            <span style={{ background: 'linear-gradient(135deg,#C9A84C,#E8C96A,#C9A84C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', fontStyle: 'italic' }}>
+              OldSoul
+            </span>
           </h1>
-          <p className="text-soul-muted text-sm sm:text-base max-w-xl mx-auto">
-            Whether you want to list your car, book a show-stopper for your fest, or just talk shop, we would love to hear from you.
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', lineHeight: 1.65, color: '#8A7A5F', maxWidth: '520px', margin: '0 auto' }}>
+            Whether you want to list a rare automobile, book a show-stopper for your fest, or simply talk shop — we'd love to hear from you.
           </p>
         </div>
-      </section>
+      </div>
 
-      {/* Main Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-          
-          {/* Left Column: Contact details */}
-          <div className="lg:col-span-5 space-y-8">
-            <div>
-              <p className="section-label mb-2">Our Office</p>
-              <h2 className="font-serif font-bold text-2xl text-soul-cream mb-5">
-                Headquarters & Garage
-              </h2>
-              <p className="text-soul-muted text-sm leading-relaxed mb-6 font-sans">
-                Located in the heart of Kochi, Kerala, our garage handles historical archive verification, vehicle inspections, and community meetups.
-              </p>
-            </div>
+      {/* ── Main Grid ── */}
+      <div style={{ ...C, marginTop: '72px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px' }}>
 
-            <div className="space-y-5">
-              {[
-                {
-                  Icon: MapPin,
-                  title: 'Location',
-                  content: 'Building 14, Old Port Road, Fort Kochi, Kerala - 682001',
-                  link: 'https://maps.google.com',
-                },
-                {
-                  Icon: Phone,
-                  title: 'Phone Number',
-                  content: '+91 98765 43210',
-                  link: 'tel:+919876543210',
-                },
-                {
-                  Icon: Mail,
-                  title: 'Email Address',
-                  content: 'hello@oldsoul.in',
-                  link: 'mailto:hello@oldsoul.in',
-                },
-                {
-                  Icon: Clock,
-                  title: 'Working Hours',
-                  content: 'Mon - Sat: 9:00 AM - 6:00 PM IST',
-                  link: null,
-                },
-              ].map(({ Icon, title, content, link }) => (
-                <div key={title} className="flex gap-4 p-4 bg-soul-card border border-soul-border rounded-sm hover:border-soul-gold/25 transition-colors">
-                  <div className="w-10 h-10 rounded-sm border border-soul-border bg-soul-black flex items-center justify-center flex-shrink-0">
-                    <Icon size={16} className="text-soul-gold" />
+          {/* Left — Contact Details */}
+          <div>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '8px' }}>
+              Our Garage
+            </p>
+            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.6rem', fontWeight: 700, color: '#F5EDD6', marginBottom: '14px' }}>
+              Headquarters & Garage
+            </h2>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', lineHeight: 1.7, color: '#8A7A5F', marginBottom: '32px' }}>
+              Located in the heart of Kochi, our garage handles archive verification, vehicle inspections, and community meetups.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {contactInfo.map(({ Icon, title, value, href }) => (
+                <div key={title} style={{ display: 'flex', gap: '16px', padding: '18px', background: '#111111', border: '1px solid #2A2A2A', borderRadius: '6px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '4px', border: '1px solid #2A2A2A', background: '#0A0A0A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon size={15} style={{ color: '#C9A84C' }} />
                   </div>
                   <div>
-                    <h4 className="text-xs font-semibold text-soul-gold uppercase tracking-wider mb-1">
-                      {title}
-                    </h4>
-                    {link ? (
-                      <a href={link} target="_blank" rel="noopener noreferrer" className="text-soul-cream hover:underline text-sm font-sans">
-                        {content}
-                      </a>
+                    <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '4px' }}>{title}</p>
+                    {href ? (
+                      <a href={href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: '#F5EDD6', textDecoration: 'none' }}>{value}</a>
                     ) : (
-                      <span className="text-soul-cream text-sm font-sans">{content}</span>
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: '#F5EDD6' }}>{value}</span>
                     )}
                   </div>
                 </div>
@@ -112,129 +106,71 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Right Column: Interactive Form */}
-          <div className="lg:col-span-7 bg-soul-card border border-soul-border rounded-sm p-6 sm:p-10 shadow-card">
+          {/* Right — Form */}
+          <div style={{ background: '#111111', border: '1px solid #2A2A2A', borderRadius: '6px', padding: '36px' }}>
             {submitted ? (
-              <div className="text-center py-12 flex flex-col items-center">
-                <div className="w-16 h-16 rounded-full bg-soul-gold/10 border border-soul-gold/40 text-soul-gold flex items-center justify-center mb-6">
-                  <CheckCircle2 size={32} />
+              <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(201,168,76,0.07)', border: '1px solid rgba(201,168,76,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                  <CheckCircle2 size={24} style={{ color: '#C9A84C' }} />
                 </div>
-                <h3 className="font-serif font-bold text-2xl text-soul-cream mb-3">
-                  Message Sent Successfully!
-                </h3>
-                <p className="text-soul-muted text-sm max-w-md mb-8 leading-relaxed">
-                  Thank you for reaching out, <strong>{formData.name}</strong>. Our curators have received your inquiry regarding <strong>"{formData.subject || 'General Inquiry'}"</strong> and will get back to you within 24 hours.
+                <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.5rem', fontWeight: 700, color: '#F5EDD6', marginBottom: '10px' }}>Message Sent</h3>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', lineHeight: 1.65, color: '#8A7A5F', maxWidth: '340px', margin: '0 auto 28px' }}>
+                  Thank you, <strong style={{ color: '#F5EDD6' }}>{form.name}</strong>. Our curators will respond within 24 hours.
                 </p>
-                <button
-                  onClick={handleReset}
-                  className="btn-gold text-sm font-semibold tracking-wide"
-                >
-                  Send Another Message
+                <button onClick={() => { setSubmitted(false); setForm({ name:'',email:'',subject:'',role:'renter',message:'' }) }}
+                  style={{ background: '#C9A84C', color: '#0A0A0A', border: 'none', borderRadius: '4px', padding: '10px 24px', fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}>
+                  Send Another
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 <div>
-                  <h3 className="font-serif font-bold text-xl text-soul-cream mb-1">Send a Message</h3>
-                  <p className="text-soul-muted text-xs">Fill in your details below and we will contact you shortly.</p>
+                  <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.2rem', fontWeight: 600, color: '#F5EDD6', margin: '0 0 4px 0' }}>Send a Message</h3>
+                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#8A7A5F' }}>Fill in your details and we'll reach out promptly.</p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                   <div>
-                    <label htmlFor="contact-name" className="block text-soul-muted text-xs mb-1.5 font-medium">
-                      Your Full Name
-                    </label>
-                    <input
-                      id="contact-name"
-                      name="name"
-                      type="text"
-                      required
-                      placeholder="e.g. Rajan Nair"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full bg-soul-black border border-soul-border rounded-sm px-3.5 py-2.5 text-sm text-soul-cream focus:outline-none focus:border-soul-gold transition-colors"
-                    />
+                    <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A7A5F', display: 'block', marginBottom: '6px' }}>Full Name</label>
+                    <input id="contact-name" name="name" type="text" required placeholder="Rajan Nair" value={form.name} onChange={handleChange} style={inputStyle} className="gold-focus" />
                   </div>
                   <div>
-                    <label htmlFor="contact-email" className="block text-soul-muted text-xs mb-1.5 font-medium">
-                      Email Address
-                    </label>
-                    <input
-                      id="contact-email"
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="rajan@example.com"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full bg-soul-black border border-soul-border rounded-sm px-3.5 py-2.5 text-sm text-soul-cream focus:outline-none focus:border-soul-gold transition-colors"
-                    />
+                    <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A7A5F', display: 'block', marginBottom: '6px' }}>Email</label>
+                    <input id="contact-email" name="email" type="email" required placeholder="rajan@example.com" value={form.email} onChange={handleChange} style={inputStyle} className="gold-focus" />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                   <div>
-                    <label htmlFor="contact-subject" className="block text-soul-muted text-xs mb-1.5 font-medium">
-                      Subject
-                    </label>
-                    <input
-                      id="contact-subject"
-                      name="subject"
-                      type="text"
-                      required
-                      placeholder="e.g. Booking vintage Mustang"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      className="w-full bg-soul-black border border-soul-border rounded-sm px-3.5 py-2.5 text-sm text-soul-cream focus:outline-none focus:border-soul-gold transition-colors"
-                    />
+                    <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A7A5F', display: 'block', marginBottom: '6px' }}>Subject</label>
+                    <input id="contact-subject" name="subject" type="text" required placeholder="Booking enquiry..." value={form.subject} onChange={handleChange} style={inputStyle} className="gold-focus" />
                   </div>
                   <div>
-                    <label htmlFor="contact-role" className="block text-soul-muted text-xs mb-1.5 font-medium">
-                      I am a / an...
-                    </label>
-                    <select
-                      id="contact-role"
-                      name="role"
-                      value={formData.role}
-                      onChange={handleInputChange}
-                      className="w-full bg-soul-black border border-soul-border rounded-sm px-3.5 py-2.5 text-sm text-soul-cream focus:outline-none focus:border-soul-gold transition-colors cursor-pointer"
-                    >
-                      <option value="renter">Event Organizer / Renter</option>
-                      <option value="owner">Vehicle Owner / Collector</option>
-                      <option value="enthusiast">Automobile Enthusiast</option>
+                    <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A7A5F', display: 'block', marginBottom: '6px' }}>I Am A…</label>
+                    <select id="contact-role" name="role" value={form.role} onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer', appearance: 'none' }} className="gold-focus">
+                      <option value="renter" style={{ background: '#111' }}>Event Organizer / Renter</option>
+                      <option value="owner" style={{ background: '#111' }}>Vehicle Owner / Collector</option>
+                      <option value="enthusiast" style={{ background: '#111' }}>Automobile Enthusiast</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="contact-message" className="block text-soul-muted text-xs mb-1.5 font-medium">
-                    Your Message
-                  </label>
-                  <textarea
-                    id="contact-message"
-                    name="message"
-                    required
-                    rows={5}
-                    placeholder="Enter your inquiry details here. If inquiring about a specific event or listing, please include as much detail as possible..."
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    className="w-full bg-soul-black border border-soul-border rounded-sm px-3.5 py-2.5 text-sm text-soul-cream focus:outline-none focus:border-soul-gold transition-colors resize-none"
-                  />
+                  <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A7A5F', display: 'block', marginBottom: '6px' }}>Message</label>
+                  <textarea id="contact-message" name="message" required rows={5} placeholder="Tell us about your event, listing, or enquiry..." value={form.message} onChange={handleChange} style={{ ...inputStyle, resize: 'none' }} className="gold-focus" />
                 </div>
 
-                <button
-                  type="submit"
-                  className="btn-gold w-full py-3.5 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 active:scale-95 shadow-md"
-                >
-                  <Send size={15} /> Send Message
+                <button type="submit" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: '#C9A84C', color: '#0A0A0A', border: 'none', borderRadius: '4px', padding: '13px', fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.06em', cursor: 'pointer', transition: 'background 0.2s' }}>
+                  <Send size={14} /> Send Message
                 </button>
               </form>
             )}
           </div>
-          
+
         </div>
-      </section>
-      
+      </div>
+
+      <style>{`.gold-focus:focus { border-color: rgba(201,168,76,0.6) !important; box-shadow: 0 0 0 3px rgba(201,168,76,0.08) !important; }`}</style>
     </div>
   )
 }

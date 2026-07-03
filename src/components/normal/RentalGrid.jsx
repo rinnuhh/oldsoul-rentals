@@ -1,86 +1,156 @@
 import { useState } from 'react'
-import { Search, MapPin, Calendar, SlidersHorizontal, Fuel, Users, Wifi, Star, CheckCircle } from 'lucide-react'
+import { Search, SlidersHorizontal, Fuel, Users, Star } from 'lucide-react'
 import { normalVehicles, vehicleTypes } from '../../data/vehicles'
 import BookingModal from '../layout/BookingModal'
 
+const fuelBadge = {
+  'Electric': { bg: '#DCFCE7', text: '#15803D' },
+  'Hybrid':   { bg: '#CCFBF1', text: '#0F766E' },
+  'Petrol':   { bg: '#FFEDD5', text: '#C2410C' },
+  'Diesel':   { bg: '#DBEAFE', text: '#1D4ED8' },
+}
+
 function RentalCard({ vehicle, onBook }) {
-  const fuelColors = {
-    'Electric': 'text-green-600 bg-green-50 border-green-200',
-    'Hybrid':   'text-teal-600 bg-teal-50 border-teal-200',
-    'Petrol':   'text-orange-600 bg-orange-50 border-orange-200',
-    'Diesel':   'text-blue-600 bg-blue-50 border-blue-200',
-  }
+  const fb = fuelBadge[vehicle.fuel] || { bg: '#F1F5F9', text: '#475569' }
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <div className="bg-white rounded-xl border border-rental-border shadow-sm overflow-hidden
-                    hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
-      {/* Image */}
-      <div className="relative h-48 overflow-hidden bg-rental-bg">
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: '#FFFFFF',
+        borderRadius: '6px',
+        border: '1px solid #E2E8F0',
+        overflow: 'hidden',
+        boxShadow: hovered ? '0 12px 24px -8px rgba(0,0,0,0.06)' : 'none',
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {/* Photo */}
+      <div style={{ position: 'relative', height: '170px', overflow: 'hidden', background: '#F8FAFC' }}>
         <img
           src={vehicle.image}
           alt={vehicle.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          style={{
+            width: '100%', height: '100%', objectFit: 'cover',
+            transform: hovered ? 'scale(1.04)' : 'scale(1)',
+            transition: 'transform 0.5s ease',
+          }}
         />
-        {/* Availability pill */}
-        <span className={`absolute top-3 right-3 text-xs font-semibold px-2.5 py-1 rounded-full border
-          ${vehicle.available
-            ? 'bg-green-50 text-green-700 border-green-200'
-            : 'bg-red-50 text-red-600 border-red-200'
-          }`}
-        >
-          {vehicle.available ? '● Available' : '● Booked'}
+        {/* Available indicator */}
+        <span style={{
+          position: 'absolute', top: '12px', right: '12px',
+          fontFamily: 'Inter, sans-serif', fontSize: '0.62rem',
+          fontWeight: 700, letterSpacing: '0.04em',
+          padding: '3px 8px', borderRadius: '3px',
+          background: vehicle.available ? '#DCFCE7' : '#FEE2E2',
+          color: vehicle.available ? '#16A34A' : '#EF4444',
+          border: vehicle.available ? '1px solid #BBF7D0' : '1px solid #FCA5A5',
+        }}>
+          {vehicle.available ? '● Ready' : '● Booked'}
         </span>
-        {/* Type badge */}
-        <span className="absolute top-3 left-3 bg-rental-navy text-white text-[10px] font-semibold tracking-wide px-2 py-1 rounded-md">
+        {/* Category Badge */}
+        <span style={{
+          position: 'absolute', top: '12px', left: '12px',
+          fontFamily: 'Inter, sans-serif', fontSize: '0.58rem',
+          fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+          padding: '3px 8px', borderRadius: '3px',
+          background: '#0F172A', color: '#FFFFFF',
+        }}>
           {vehicle.type}
         </span>
       </div>
 
-      {/* Body */}
-      <div className="p-4">
-        <h3 className="font-semibold text-rental-text text-base mb-3 group-hover:text-rental-blue transition-colors">
-          {vehicle.name}
-        </h3>
+      {/* Details */}
+      <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div>
+          <h3 style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.9rem', fontWeight: 700,
+            color: hovered ? '#2563EB' : '#0F172A',
+            transition: 'color 0.2s',
+            margin: '0 0 10px 0',
+          }}>
+            {vehicle.name}
+          </h3>
 
-        {/* Specs row */}
-        <div className="flex items-center gap-4 mb-4">
-          <span className="flex items-center gap-1.5 text-rental-muted text-xs">
-            <Users size={12} /> {vehicle.seats} seats
-          </span>
-          <span className={`flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full border
-            ${fuelColors[vehicle.fuel] || 'text-rental-muted bg-rental-bg border-rental-border'}`}
-          >
-            <Fuel size={10} /> {vehicle.fuel}
-          </span>
-          <span className="text-rental-muted text-xs">{vehicle.transmission}</span>
-        </div>
-
-        {/* Features */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {vehicle.features.slice(0, 3).map(f => (
-            <span key={f} className="text-[10px] text-rental-muted bg-rental-bg border border-rental-border rounded-md px-2 py-0.5">
-              {f}
+          {/* Attributes */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '14px' }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: '4px',
+              fontFamily: 'Inter, sans-serif', fontSize: '0.65rem',
+              color: '#64748B', background: '#F8FAFC',
+              border: '1px solid #E2E8F0', padding: '2px 6px', borderRadius: '4px',
+            }}>
+              <Users size={10} /> {vehicle.seats} seats
             </span>
-          ))}
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: '4px',
+              fontFamily: 'Inter, sans-serif', fontSize: '0.65rem',
+              fontWeight: 600,
+              color: fb.text, background: fb.bg,
+              padding: '2px 6px', borderRadius: '4px',
+            }}>
+              <Fuel size={9} /> {vehicle.fuel}
+            </span>
+            <span style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.65rem',
+              color: '#64748B', background: '#F8FAFC',
+              border: '1px solid #E2E8F0', padding: '2px 6px', borderRadius: '4px',
+            }}>
+              {vehicle.transmission}
+            </span>
+          </div>
+
+          {/* Feature Tags */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '16px' }}>
+            {vehicle.features.slice(0, 3).map(f => (
+              <span key={f} style={{
+                fontFamily: 'Inter, sans-serif', fontSize: '0.6rem',
+                color: '#64748B', border: '1px solid #E2E8F0',
+                padding: '2px 6px', borderRadius: '3px',
+              }}>
+                {f}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Price + CTA */}
-        <div className="flex items-center justify-between pt-3 border-t border-rental-border">
+        {/* Pricing & Button */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          borderTop: '1px solid #E2E8F0', paddingTop: '14px', marginTop: '12px',
+        }}>
           <div>
-            <span className="text-rental-navy font-bold text-lg">₹{vehicle.pricePerDay.toLocaleString()}</span>
-            <span className="text-rental-muted text-xs"> /day</span>
-            <p className="text-rental-muted text-[10px]">₹{vehicle.pricePerKm}/km extra</p>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.05rem', fontWeight: 800, color: '#0F172A' }}>
+                ₹{vehicle.pricePerDay.toLocaleString()}
+              </span>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#64748B' }}>/day</span>
+            </div>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.58rem', color: '#64748B', margin: '2px 0 0 0' }}>
+              ₹{vehicle.priceKm} /km extra
+            </p>
           </div>
+
           <button
             onClick={() => onBook(vehicle)}
             disabled={!vehicle.available}
-            className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200
-              ${vehicle.available
-                ? 'bg-rental-blue text-white hover:bg-blue-700 active:scale-95'
-                : 'bg-rental-bg text-rental-muted cursor-not-allowed border border-rental-border'
-              }`}
+            style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.72rem',
+              fontWeight: 700, padding: '8px 16px', borderRadius: '4px',
+              border: 'none', cursor: vehicle.available ? 'pointer' : 'not-allowed',
+              background: vehicle.available ? '#2563EB' : '#F1F5F9',
+              color: vehicle.available ? '#FFFFFF' : '#94A3B8',
+              transition: 'background 0.2s',
+            }}
+            className="rental-card-btn"
           >
-            {vehicle.available ? 'Book Now' : 'Unavailable'}
+            {vehicle.available ? 'Book Car' : 'Unavailable'}
           </button>
         </div>
       </div>
@@ -89,10 +159,10 @@ function RentalCard({ vehicle, onBook }) {
 }
 
 export default function RentalGrid() {
-  const [search,      setSearch]      = useState('')
-  const [activeType,  setActiveType]  = useState('all')
+  const [search, setSearch] = useState('')
+  const [activeType, setActiveType] = useState('all')
   const [showFilters, setShowFilters] = useState(false)
-  const [sortBy,      setSortBy]      = useState('price-asc')
+  const [sortBy, setSortBy] = useState('price-asc')
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [isBookingOpen, setIsBookingOpen] = useState(false)
 
@@ -114,85 +184,111 @@ export default function RentalGrid() {
     })
 
   return (
-    <div>
-      {/* Search & filter bar */}
-      <div className="bg-white border-b border-rental-border sticky top-16 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-rental-muted" />
+    <div style={{ background: '#F8FAFC', paddingBottom: '72px' }}>
+      
+      {/* Search & Sort Panel */}
+      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', sticky: 'top', zIndex: 20 }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '20px 40px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
+            
+            {/* Search Input */}
+            <div style={{ position: 'relative', flex: 1, minWidth: '240px' }}>
+              <Search size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
               <input
                 id="rental-search-input"
                 type="text"
-                placeholder="Search vehicles..."
+                placeholder="Search rentals (e.g. Swift, Fortuner...)"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 border border-rental-border rounded-lg text-sm
-                           text-rental-text placeholder-rental-muted focus:outline-none focus:border-rental-blue
-                           transition-colors"
+                style={{
+                  width: '100%', padding: '10px 12px 10px 36px',
+                  border: '1px solid #E2E8F0', borderRadius: '4px',
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.8rem',
+                  color: '#0F172A', outline: 'none',
+                }}
+                className="input-focus"
               />
             </div>
 
-            {/* Sort */}
+            {/* Sort Dropdown */}
             <select
               id="rental-sort-select"
               value={sortBy}
               onChange={e => setSortBy(e.target.value)}
-              className="border border-rental-border rounded-lg px-3 py-2.5 text-sm text-rental-text
-                         focus:outline-none focus:border-rental-blue cursor-pointer"
+              style={{
+                padding: '10px 16px', border: '1px solid #E2E8F0', borderRadius: '4px',
+                fontFamily: 'Inter, sans-serif', fontSize: '0.8rem',
+                color: '#475569', background: '#FFFFFF', cursor: 'pointer', outline: 'none',
+              }}
+              className="input-focus"
             >
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
             </select>
 
-            {/* Filter toggle */}
+            {/* Filter Toggle */}
             <button
               id="rental-filter-btn"
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 border rounded-lg px-4 py-2.5 text-sm font-medium transition-colors
-                ${showFilters ? 'border-rental-blue text-rental-blue bg-rental-blue-light' : 'border-rental-border text-rental-muted hover:border-rental-blue hover:text-rental-blue'}`}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                padding: '10px 16px', borderRadius: '4px',
+                border: '1px solid #E2E8F0', cursor: 'pointer',
+                background: showFilters ? '#EFF6FF' : '#FFFFFF',
+                color: showFilters ? '#2563EB' : '#475569',
+                fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 600,
+              }}
             >
-              <SlidersHorizontal size={15} />
-              Filters
+              <SlidersHorizontal size={14} /> Filters
             </button>
           </div>
 
-          {/* Type filter (expandable) */}
+          {/* Filter Sub-panel */}
           {showFilters && (
-            <div className="flex flex-wrap gap-2 pt-3 mt-3 border-t border-rental-border">
-              {vehicleTypes.map(({ key, label }) => (
-                <button
-                  key={key}
-                  id={`rental-type-${key}`}
-                  onClick={() => setActiveType(key)}
-                  className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-all duration-200
-                    ${activeType === key
-                      ? 'bg-rental-navy text-white border-rental-navy'
-                      : 'border-rental-border text-rental-muted hover:border-rental-navy hover:text-rental-navy'
-                    }`}
-                >
-                  {label}
-                </button>
-              ))}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #E2E8F0' }}>
+              {vehicleTypes.map(({ key, label }) => {
+                const isActive = activeType === key
+                return (
+                  <button
+                    key={key}
+                    id={`rental-type-${key}`}
+                    onClick={() => setActiveType(key)}
+                    style={{
+                      fontFamily: 'Inter, sans-serif', fontSize: '0.72rem',
+                      fontWeight: 600, padding: '6px 14px', borderRadius: '3px',
+                      cursor: 'pointer',
+                      background: isActive ? '#0F172A' : '#FFFFFF',
+                      color: isActive ? '#FFFFFF' : '#64748B',
+                      border: isActive ? '1px solid #0F172A' : '1px solid #E2E8F0',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
             </div>
           )}
         </div>
       </div>
 
-      {/* Results */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <p className="text-rental-muted text-sm mb-6">
-          Showing <strong className="text-rental-text">{filtered.length}</strong> vehicles
+      {/* Grid Content */}
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '32px 40px' }}>
+        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: '#64748B', marginBottom: '20px' }}>
+          Showing <strong style={{ color: '#0F172A' }}>{filtered.length}</strong> matching vehicles
         </p>
 
         {filtered.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-4xl mb-4">🔍</p>
-            <p className="text-rental-muted">No vehicles match your search.</p>
+          <div style={{ textAlign: 'center', padding: '64px 0' }}>
+            <p style={{ fontSize: '1.8rem', margin: '0 0 10px 0' }}>🔍</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#64748B' }}>No vehicles match your current search.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            gap: '24px',
+          }}>
             {filtered.map(v => <RentalCard key={v.id} vehicle={v} onBook={handleBook} />)}
           </div>
         )}
@@ -204,6 +300,16 @@ export default function RentalGrid() {
         vehicle={selectedVehicle}
         mode="normal"
       />
+
+      <style>{`
+        .input-focus:focus {
+          border-color: #2563EB !important;
+        }
+        .rental-card-btn:hover {
+          background-color: #1D4ED8 !important;
+        }
+      `}</style>
+
     </div>
   )
 }

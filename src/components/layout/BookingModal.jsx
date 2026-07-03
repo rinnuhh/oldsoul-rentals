@@ -37,7 +37,6 @@ export default function BookingModal({ isOpen, onClose, vehicle, mode = 'show' }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Generate simple mock booking reference
     const rand = Math.floor(10000 + Math.random() * 90000)
     setBookingRef(`OS-${rand}`)
     setSubmitted(true)
@@ -60,142 +59,205 @@ export default function BookingModal({ isOpen, onClose, vehicle, mode = 'show' }
 
   const isShowMode = mode === 'show'
 
-  // Pricing calculations
   const pricePerDay = vehicle.pricePerDay || 0
   const subtotal = pricePerDay * days
   const serviceFee = isShowMode ? Math.round(subtotal * 0.05) : Math.round(subtotal * 0.03)
   const insurancePrice = formData.insurance === 'premium' ? 500 * days : 0
   const total = subtotal + serviceFee + insurancePrice
 
+  const darkInput = {
+    width: '100%',
+    background: '#0A0A0A',
+    border: '1px solid #2A2A2A',
+    borderRadius: '4px',
+    padding: '10px 12px',
+    fontSize: '0.8rem',
+    fontFamily: 'Inter, sans-serif',
+    color: '#F5EDD6',
+    outline: 'none',
+  }
+
+  const lightInput = {
+    width: '100%',
+    background: '#FFFFFF',
+    border: '1px solid #E2E8F0',
+    borderRadius: '4px',
+    padding: '10px 12px',
+    fontSize: '0.8rem',
+    fontFamily: 'Inter, sans-serif',
+    color: '#0F172A',
+    outline: 'none',
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm px-4 py-6 overflow-y-auto">
-      {/* Modal Container */}
-      <div
-        className={`relative w-full max-w-2xl rounded-lg shadow-card-lg overflow-hidden border transition-all duration-300 my-auto
-          ${isShowMode
-            ? 'bg-soul-dark border-soul-border text-soul-cream'
-            : 'bg-white border-rental-border text-rental-text'
-          }`}
-      >
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 100,
+      background: 'rgba(0,0,0,0.82)',
+      backdropFilter: 'blur(4px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '20px',
+    }}>
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        maxWidth: '780px',
+        background: isShowMode ? '#111111' : '#FFFFFF',
+        border: isShowMode ? '1px solid #2A2A2A' : '1px solid #E2E8F0',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        boxShadow: '0 24px 64px -16px rgba(0,0,0,0.45)',
+      }}>
         {/* Header */}
-        <div
-          className={`flex items-center justify-between px-6 py-4 border-b
-            ${isShowMode ? 'border-soul-border bg-soul-black' : 'border-rental-border bg-rental-bg'}`}
-        >
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '20px 24px',
+          borderBottom: isShowMode ? '1px solid #2A2A2A' : '1px solid #E2E8F0',
+          background: isShowMode ? '#0A0A0A' : '#F8FAFC',
+        }}>
           <div>
-            <h2 className={`font-serif font-bold text-lg leading-tight ${isShowMode ? 'text-soul-gold' : 'text-rental-navy'}`}>
-              {submitted ? 'Booking Confirmed' : `Request Booking`}
+            <h2 style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: '1.2rem', fontWeight: 700,
+              color: isShowMode ? '#C9A84C' : '#0F172A',
+              margin: 0,
+            }}>
+              {submitted ? 'Reservation Request Received' : 'Request Reservation'}
             </h2>
-            <p className={`text-xs mt-0.5 ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-              {vehicle.name} • {vehicle.year || vehicle.type}
+            <p style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.72rem',
+              color: isShowMode ? '#8A7A5F' : '#64748B',
+              margin: '3px 0 0 0',
+            }}>
+              {vehicle.name} • {vehicle.year}
             </p>
           </div>
           <button
             onClick={handleClose}
-            className={`p-1.5 rounded-full transition-colors
-              ${isShowMode ? 'text-soul-muted hover:text-soul-cream hover:bg-soul-card' : 'text-rental-muted hover:text-rental-navy hover:bg-rental-border'}`}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: isShowMode ? '#8A7A5F' : '#64748B', display: 'flex',
+            }}
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Body */}
+        {/* Content Body */}
         {submitted ? (
-          /* SUCCESS STATE */
-          <div className="p-8 text-center flex flex-col items-center">
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 animate-bounce
-              ${isShowMode ? 'bg-soul-gold/10 border border-soul-gold/40 text-soul-gold' : 'bg-green-50 border border-green-200 text-green-600'}`}>
-              <CheckCircle2 size={32} />
+          <div style={{ padding: '48px 32px', textAlign: 'center' }}>
+            <div style={{
+              width: '56px', height: '56px', borderRadius: '50%',
+              background: isShowMode ? 'rgba(201,168,76,0.08)' : '#DCFCE7',
+              border: isShowMode ? '1px solid rgba(201,168,76,0.2)' : '1px solid #BBF7D0',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}>
+              <CheckCircle2 size={24} style={{ color: isShowMode ? '#C9A84C' : '#16A34A' }} />
             </div>
-
-            <h3 className={`font-serif font-bold text-2xl mb-2 ${isShowMode ? 'text-soul-cream' : 'text-rental-navy'}`}>
-              Reservation Requested!
+            
+            <h3 style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: '1.6rem', fontWeight: 700,
+              color: isShowMode ? '#F5EDD6' : '#0F172A',
+              marginBottom: '8px',
+            }}>
+              Booking Request Sent
             </h3>
-            <p className={`text-sm max-w-md mb-6 leading-relaxed ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-              Your request for the <strong>{vehicle.name}</strong> has been sent to the owner. They will review and confirm within 24 hours.
+            
+            <p style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.85rem',
+              lineHeight: 1.6, color: isShowMode ? '#8A7A5F' : '#475569',
+              maxWidth: '420px', margin: '0 auto 32px',
+            }}>
+              Your reservation request has been logged. The host will confirm availability and secure your slot within 24 hours.
             </p>
 
-            {/* Receipt Details */}
-            <div className={`w-full max-w-sm rounded-lg p-5 border text-left mb-8
-              ${isShowMode ? 'bg-soul-black border-soul-border' : 'bg-rental-bg border-rental-border'}`}>
-              <div className="flex justify-between items-center pb-3 border-b border-dashed mb-4 border-slate-700">
-                <span className={`text-xs font-mono tracking-wider ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                  BOOKING REFERENCE
+            {/* Receipt Summary Card */}
+            <div style={{
+              maxWidth: '380px', margin: '0 auto 32px', textAlign: 'left',
+              background: isShowMode ? '#0A0A0A' : '#F8FAFC',
+              border: isShowMode ? '1px solid #2A2A2A' : '1px solid #E2E8F0',
+              borderRadius: '6px', padding: '20px',
+            }}>
+              <div style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                paddingBottom: '12px', borderBottom: isShowMode ? '1px dashed #2A2A2A' : '1px dashed #E2E8F0',
+                marginBottom: '16px',
+              }}>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.08em', color: '#64748B' }}>
+                  REFERENCE NUMBER
                 </span>
-                <span className={`font-mono font-bold text-sm flex items-center gap-1.5 ${isShowMode ? 'text-soul-gold' : 'text-rental-navy'}`}>
-                  <Ticket size={14} /> {bookingRef}
+                <span style={{
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', fontWeight: 700,
+                  color: isShowMode ? '#C9A84C' : '#2563EB', display: 'inline-flex', alignItems: 'center', gap: '4px',
+                }}>
+                  <Ticket size={12} /> {bookingRef}
                 </span>
               </div>
-
-              <div className="space-y-2.5 text-xs">
-                <div className="flex justify-between">
-                  <span className={isShowMode ? 'text-soul-muted' : 'text-rental-muted'}>Renter Name</span>
-                  <span className="font-medium">{formData.name}</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontFamily: 'Inter, sans-serif', fontSize: '0.75rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>Full Name</span>
+                  <span style={{ color: isShowMode ? '#F5EDD6' : '#0F172A', fontWeight: 500 }}>{formData.name}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className={isShowMode ? 'text-soul-muted' : 'text-rental-muted'}>Dates</span>
-                  <span className="font-medium">{formData.startDate} to {formData.endDate}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>Period</span>
+                  <span style={{ color: isShowMode ? '#F5EDD6' : '#0F172A', fontWeight: 500 }}>{formData.startDate} to {formData.endDate}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className={isShowMode ? 'text-soul-muted' : 'text-rental-muted'}>Duration</span>
-                  <span className="font-medium">{days} {days === 1 ? 'Day' : 'Days'}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#64748B' }}>Total Duration</span>
+                  <span style={{ color: isShowMode ? '#F5EDD6' : '#0F172A', fontWeight: 500 }}>{days} {days === 1 ? 'Day' : 'Days'}</span>
                 </div>
-                {isShowMode && formData.eventOrVenue && (
-                  <div className="flex justify-between">
-                    <span className="text-soul-muted">Event Venue</span>
-                    <span className="font-medium truncate max-w-[200px]">{formData.eventOrVenue}</span>
-                  </div>
-                )}
-                <div className="flex justify-between pt-3 border-t border-slate-700/50 font-semibold text-sm">
-                  <span className={isShowMode ? 'text-soul-cream' : 'text-rental-navy'}>Estimated Total</span>
-                  <span className={isShowMode ? 'text-soul-gold' : 'text-rental-blue'}>₹{total.toLocaleString()}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px', borderTop: isShowMode ? '1px solid #2A2A2A' : '1px solid #E2E8F0', fontWeight: 700 }}>
+                  <span style={{ color: isShowMode ? '#F5EDD6' : '#0F172A' }}>Estimated Bill</span>
+                  <span style={{ color: isShowMode ? '#C9A84C' : '#2563EB' }}>₹{total.toLocaleString()}</span>
                 </div>
               </div>
             </div>
 
             <button
               onClick={handleClose}
-              className={`w-full max-w-sm py-3 text-sm font-semibold rounded-sm tracking-wide
-                ${isShowMode ? 'btn-gold' : 'bg-rental-navy text-white hover:bg-opacity-95'}`}
+              style={{
+                background: isShowMode ? '#C9A84C' : '#2563EB',
+                color: isShowMode ? '#0A0A0A' : '#FFFFFF',
+                border: 'none', borderRadius: '4px',
+                padding: '12px 32px',
+                fontFamily: 'Inter, sans-serif', fontSize: '0.8rem',
+                fontWeight: 700, letterSpacing: '0.04em', cursor: 'pointer',
+              }}
             >
-              Back to Fleet
+              Close Window
             </button>
           </div>
         ) : (
-          /* FORM STATE */
-          <form onSubmit={handleSubmit}>
-            <div className="p-6 grid grid-cols-1 md:grid-cols-12 gap-6 max-h-[70vh] overflow-y-auto">
+          <form onSubmit={handleSubmit} style={{ margin: 0 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
               
-              {/* Left Column - Contact Details */}
-              <div className="md:col-span-7 space-y-4">
-                <h3 className={`text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5
-                  ${isShowMode ? 'text-soul-gold' : 'text-rental-navy'}`}>
-                  <User size={13} /> Personal Information
+              {/* Form columns */}
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <h3 style={{
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 700,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
+                  color: isShowMode ? '#C9A84C' : '#2563EB', margin: '0 0 4px 0',
+                }}>
+                  Renter Information
                 </h3>
                 
                 <div>
-                  <label className={`block text-xs font-medium mb-1.5 ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                    Full Name
-                  </label>
+                  <label className="block text-slate-500 text-xs mb-1">Full Name</label>
                   <input
                     type="text"
                     name="name"
                     required
-                    placeholder="e.g. Rajan Nair"
+                    placeholder="Rajan Nair"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`w-full text-sm px-3.5 py-2.5 rounded border focus:outline-none transition-all
-                      ${isShowMode
-                        ? 'bg-soul-black border-soul-border text-soul-cream focus:border-soul-gold'
-                        : 'bg-white border-rental-border text-rental-text focus:border-rental-blue'}`}
+                    style={isShowMode ? darkInput : lightInput}
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div>
-                    <label className={`block text-xs font-medium mb-1.5 ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                      Email Address
-                    </label>
+                    <label className="block text-slate-500 text-xs mb-1">Email</label>
                     <input
                       type="email"
                       name="email"
@@ -203,198 +265,181 @@ export default function BookingModal({ isOpen, onClose, vehicle, mode = 'show' }
                       placeholder="rajan@example.com"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className={`w-full text-sm px-3.5 py-2.5 rounded border focus:outline-none transition-all
-                        ${isShowMode
-                          ? 'bg-soul-black border-soul-border text-soul-cream focus:border-soul-gold'
-                          : 'bg-white border-rental-border text-rental-text focus:border-rental-blue'}`}
+                      style={isShowMode ? darkInput : lightInput}
                     />
                   </div>
                   <div>
-                    <label className={`block text-xs font-medium mb-1.5 ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                      Phone Number
-                    </label>
+                    <label className="block text-slate-500 text-xs mb-1">Phone</label>
                     <input
                       type="tel"
                       name="phone"
                       required
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 98765..."
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className={`w-full text-sm px-3.5 py-2.5 rounded border focus:outline-none transition-all
-                        ${isShowMode
-                          ? 'bg-soul-black border-soul-border text-soul-cream focus:border-soul-gold'
-                          : 'bg-white border-rental-border text-rental-text focus:border-rental-blue'}`}
+                      style={isShowMode ? darkInput : lightInput}
                     />
                   </div>
                 </div>
 
-                <h3 className={`text-xs font-bold uppercase tracking-wider pt-3 mb-2 flex items-center gap-1.5
-                  ${isShowMode ? 'text-soul-gold' : 'text-rental-navy'}`}>
-                  <Calendar size={13} /> Rental Schedule
+                <h3 style={{
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 700,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
+                  color: isShowMode ? '#C9A84C' : '#2563EB', margin: '8px 0 4px 0',
+                }}>
+                  Duration & Logistics
                 </h3>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div>
-                    <label className={`block text-xs font-medium mb-1.5 ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                      Start Date
-                    </label>
+                    <label className="block text-slate-500 text-xs mb-1">Start Date</label>
                     <input
                       type="date"
                       name="startDate"
                       required
                       value={formData.startDate}
                       onChange={handleInputChange}
-                      className={`w-full text-sm px-3.5 py-2.5 rounded border focus:outline-none transition-all cursor-pointer
-                        ${isShowMode
-                          ? 'bg-soul-black border-soul-border text-soul-cream focus:border-soul-gold'
-                          : 'bg-white border-rental-border text-rental-text focus:border-rental-blue'}`}
+                      style={isShowMode ? darkInput : lightInput}
                     />
                   </div>
                   <div>
-                    <label className={`block text-xs font-medium mb-1.5 ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                      End Date
-                    </label>
+                    <label className="block text-slate-500 text-xs mb-1">End Date</label>
                     <input
                       type="date"
                       name="endDate"
                       required
                       value={formData.endDate}
                       onChange={handleInputChange}
-                      className={`w-full text-sm px-3.5 py-2.5 rounded border focus:outline-none transition-all cursor-pointer
-                        ${isShowMode
-                          ? 'bg-soul-black border-soul-border text-soul-cream focus:border-soul-gold'
-                          : 'bg-white border-rental-border text-rental-text focus:border-rental-blue'}`}
+                      style={isShowMode ? darkInput : lightInput}
                     />
                   </div>
                 </div>
 
                 {isShowMode ? (
                   <div>
-                    <label className="block text-xs font-medium mb-1.5 text-soul-muted">
-                      Event / Exhibition Venue
-                    </label>
-                    <div className="relative">
-                      <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-soul-muted" />
-                      <input
-                        type="text"
-                        name="eventOrVenue"
-                        required
-                        placeholder="e.g. Grand Hyatt Convention Center"
-                        value={formData.eventOrVenue}
-                        onChange={handleInputChange}
-                        className="w-full text-sm pl-9 pr-4 py-2.5 bg-soul-black border border-soul-border text-soul-cream rounded focus:outline-none focus:border-soul-gold"
-                      />
-                    </div>
+                    <label className="block text-slate-500 text-xs mb-1">Show Location / Venue</label>
+                    <input
+                      type="text"
+                      name="eventOrVenue"
+                      required
+                      placeholder="e.g. Grand Hyatt Exhibition Hall"
+                      value={formData.eventOrVenue}
+                      onChange={handleInputChange}
+                      style={darkInput}
+                    />
                   </div>
                 ) : (
                   <div>
-                    <label className="block text-xs font-medium mb-1.5 text-rental-muted">
-                      Coverage Insurance Package
-                    </label>
+                    <label className="block text-slate-500 text-xs mb-1">Insurance Cover</label>
                     <select
                       name="insurance"
                       value={formData.insurance}
                       onChange={handleInputChange}
-                      className="w-full text-sm px-3.5 py-2.5 bg-white border border-rental-border text-rental-text rounded focus:outline-none focus:border-rental-blue cursor-pointer"
+                      style={{ ...lightInput, cursor: 'pointer' }}
                     >
                       <option value="standard">Standard Cover (Included)</option>
-                      <option value="premium">Full Zero-Depreciation Protection (+₹500/day)</option>
+                      <option value="premium">Full Shield Cover (+₹500/day)</option>
                     </select>
                   </div>
                 )}
 
                 <div>
-                  <label className={`block text-xs font-medium mb-1.5 ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                    Additional Notes or Requirements
-                  </label>
+                  <label className="block text-slate-500 text-xs mb-1">Logistics / Specific Requests</label>
                   <textarea
                     name="notes"
                     rows={2}
-                    placeholder={isShowMode ? "Describe the show setup, logistics, static vs. dynamic, etc." : "Delivery requests, child seat, gps, etc."}
+                    placeholder={isShowMode ? "Describe standard display timing, logistics..." : "Delivery requests..."}
                     value={formData.notes}
                     onChange={handleInputChange}
-                    className={`w-full text-sm px-3.5 py-2.5 rounded border focus:outline-none transition-all resize-none
-                      ${isShowMode
-                        ? 'bg-soul-black border-soul-border text-soul-cream focus:border-soul-gold'
-                        : 'bg-white border-rental-border text-rental-text focus:border-rental-blue'}`}
+                    style={{ ...(isShowMode ? darkInput : lightInput), resize: 'none' }}
                   />
                 </div>
               </div>
 
-              {/* Right Column - Booking Summary */}
-              <div className="md:col-span-5 space-y-4">
-                <div className={`rounded-lg p-5 border h-full flex flex-col justify-between
-                  ${isShowMode ? 'bg-soul-black border-soul-border' : 'bg-rental-bg border-rental-border'}`}>
-                  
-                  <div>
-                    <h3 className={`text-xs font-bold uppercase tracking-wider mb-4 border-b pb-2
-                      ${isShowMode ? 'text-soul-gold border-soul-border/50' : 'text-rental-navy border-rental-border'}`}>
-                      Summary
-                    </h3>
-                    
-                    {/* Vehicle Miniature Card */}
-                    <div className="flex gap-3 mb-4">
-                      <img
-                        src={vehicle.image}
-                        alt={vehicle.name}
-                        className="w-20 h-14 object-cover rounded bg-black/25"
-                      />
-                      <div>
-                        <h4 className="font-semibold text-sm leading-tight">{vehicle.name}</h4>
-                        <p className={`text-[10px] mt-0.5 ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                          {vehicle.location || (isShowMode ? 'Kochi' : 'City-wide')}
-                        </p>
-                        <p className="text-xs font-semibold mt-1">₹{pricePerDay.toLocaleString()}<span className="text-[10px] font-normal text-muted-foreground">/day</span></p>
-                      </div>
-                    </div>
+              {/* Pricing Column */}
+              <div style={{
+                padding: '24px',
+                background: isShowMode ? '#0A0A0A' : '#F8FAFC',
+                borderLeft: isShowMode ? '1px solid #2A2A2A' : '1px solid #E2E8F0',
+                display: 'flex', flexDirection: 'column', justifySelf: 'stretch', justifyContent: 'space-between',
+              }}>
+                <div>
+                  <h3 style={{
+                    fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 700,
+                    letterSpacing: '0.12em', textTransform: 'uppercase',
+                    color: isShowMode ? '#C9A84C' : '#2563EB', margin: '0 0 16px 0',
+                    borderBottom: isShowMode ? '1px solid #2A2A2A' : '1px solid #E2E8F0',
+                    paddingBottom: '8px',
+                  }}>
+                    Order Overview
+                  </h3>
 
-                    <div className="space-y-2 text-xs">
-                      <div className="flex justify-between">
-                        <span className={isShowMode ? 'text-soul-muted' : 'text-rental-muted'}>Daily Rate</span>
-                        <span>₹{pricePerDay.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className={isShowMode ? 'text-soul-muted' : 'text-rental-muted'}>Rental Period</span>
-                        <span>{days} {days === 1 ? 'Day' : 'Days'}</span>
-                      </div>
-                      
-                      {formData.insurance === 'premium' && (
-                        <div className="flex justify-between text-green-600 font-medium">
-                          <span>Zero-Dep Insurance</span>
-                          <span>+₹{(500 * days).toLocaleString()}</span>
-                        </div>
-                      )}
-
-                      <div className="flex justify-between pt-2">
-                        <span className={isShowMode ? 'text-soul-muted' : 'text-rental-muted'}>Service Fee</span>
-                        <span>₹{serviceFee.toLocaleString()}</span>
-                      </div>
+                  <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+                    <img
+                      src={vehicle.image}
+                      alt={vehicle.name}
+                      style={{ width: '80px', height: '56px', objectFit: 'cover', borderRadius: '4px' }}
+                    />
+                    <div>
+                      <h4 style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', fontWeight: 700, margin: 0, color: isShowMode ? '#F5EDD6' : '#0F172A' }}>
+                        {vehicle.name}
+                      </h4>
+                      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.68rem', color: '#64748B', margin: '2px 0 0 0' }}>
+                        ₹{pricePerDay.toLocaleString()} / day
+                      </p>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-dashed mt-4 border-slate-700/50">
-                    <div className="flex justify-between items-end mb-5">
-                      <div>
-                        <p className={`text-[10px] uppercase font-bold tracking-wider ${isShowMode ? 'text-soul-muted' : 'text-rental-muted'}`}>
-                          Total Estimate
-                        </p>
-                        <span className="text-[9px] text-muted-foreground">(All Taxes Included)</span>
-                      </div>
-                      <span className={`text-xl font-bold leading-none ${isShowMode ? 'text-soul-gold' : 'text-rental-navy'}`}>
-                        ₹{total.toLocaleString()}
-                      </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontFamily: 'Inter, sans-serif', fontSize: '0.72rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#64748B' }}>Daily Rent</span>
+                      <span style={{ color: isShowMode ? '#F5EDD6' : '#0F172A' }}>₹{pricePerDay.toLocaleString()}</span>
                     </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#64748B' }}>Days Selected</span>
+                      <span style={{ color: isShowMode ? '#F5EDD6' : '#0F172A' }}>{days}</span>
+                    </div>
+                    {formData.insurance === 'premium' && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#16A34A', fontWeight: 500 }}>Zero-Dep Insurance</span>
+                        <span style={{ color: '#16A34A', fontWeight: 500 }}>+₹{(500 * days).toLocaleString()}</span>
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#64748B' }}>Platform Fee</span>
+                      <span style={{ color: isShowMode ? '#F5EDD6' : '#0F172A' }}>₹{serviceFee.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
 
-                    <button
-                      type="submit"
-                      className={`w-full py-3.5 text-sm font-semibold rounded-sm tracking-wide transition-all active:scale-95 shadow-md flex items-center justify-center gap-2
-                        ${isShowMode ? 'btn-gold' : 'bg-rental-blue hover:bg-blue-700 text-white'}`}
-                    >
-                      <ShieldCheck size={16} />
-                      Request Booking
-                    </button>
+                <div style={{ borderTop: isShowMode ? '1px solid #2A2A2A' : '1px solid #E2E8F0', paddingTop: '16px', marginTop: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px' }}>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 700, color: isShowMode ? '#F5EDD6' : '#0F172A' }}>
+                      Estimated Total
+                    </span>
+                    <span style={{
+                      fontFamily: 'Inter, sans-serif', fontSize: '1.25rem', fontWeight: 800,
+                      color: isShowMode ? '#C9A84C' : '#2563EB',
+                    }}>
+                      ₹{total.toLocaleString()}
+                    </span>
                   </div>
 
+                  <button
+                    type="submit"
+                    style={{
+                      width: '100%',
+                      background: isShowMode ? '#C9A84C' : '#2563EB',
+                      color: isShowMode ? '#0A0A0A' : '#FFFFFF',
+                      border: 'none', borderRadius: '4px',
+                      padding: '12px',
+                      fontFamily: 'Inter, sans-serif', fontSize: '0.8rem',
+                      fontWeight: 700, letterSpacing: '0.04em', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                    }}
+                  >
+                    <ShieldCheck size={14} /> Request Reservation
+                  </button>
                 </div>
               </div>
 

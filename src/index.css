@@ -72,27 +72,31 @@ html {
   scroll-behavior: smooth;
 }
 
-/*
- * FONT CONSTRAINT — Strict enforcement:
- *   Headings  → Playfair Display (serif)
- *   All other → Inter (sans-serif)
- * No third font family allowed anywhere.
- */
 body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing:  antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #0A0A0A;
   color: #F5EDD6;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', Georgia, serif;
 }
 
-/* All other text nodes inherit Inter from body */
 p, span, a, li, button, input, textarea, select, label, td, th {
-  font-family: inherit; /* Inter from body */
+  font-family: inherit;
+}
+
+/* ─── Global responsive container ────────────────────── */
+.site-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+@media (max-width: 768px) {
+  .site-container { padding: 0 20px; }
 }
 
 /* ─── Scrollbar ───────────────────────────────────────── */
