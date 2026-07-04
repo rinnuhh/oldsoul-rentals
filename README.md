@@ -1,16 +1,34 @@
-# React + Vite
+OldSoul Rentals
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+OldSoul Rentals is a premium vehicle rental platform built to connect vehicle owners with individuals and organizations looking for cars and bikes for events, exhibitions, and daily rentals.
 
-Currently, two official plugins are available:
+The platform clearly separates show-grade vehicles (vintage, modified, exhibition cars) from normal rentals, ensuring a clean, structured, and trustworthy user experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Key Features
+Dual Rental System
+Show Rentals for college events, auto shows, and exhibitions
+Normal Rentals with a simple, professional interface
+Clean & Elegant UI
+Classic automotive design language
+Well-structured vehicle cards with clear information hierarchy
+Minimal, distraction-free layout focused on usability
+Responsive Design
+Fully optimized for mobile, tablet, and desktop
+Consistent spacing and layout across screen sizes
+Scalable Codebase
+Component-based React architecture
+Easy to extend with backend features like bookings, authentication, and admin workflows
+Tech Stack
 
-## React Compiler
+Frontend: React (Vite), Tailwind CSS, JavaScript
+Backend (Extendable): PHP, MySQL
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Use Cases
+College fests and cultural events
+Auto shows and exhibitions
+Photoshoots and promotions
+Short-term personal or professional rentals
+Author
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Developed by Rinsha V
+Focused on building clean, user-centric, and scalable web applications.
