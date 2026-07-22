@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
-import { showVehicles, categoryFilters } from '../../data/vehicles'
+import { getShowVehicles } from '../../services/vehicleService'
+import { categoryFilters } from '../../data/vehicles'
 import BookingModal from '../layout/BookingModal'
 
 /* ── Badge colours per category ──────────────────────────── */
@@ -33,7 +34,6 @@ function VehicleCard({ vehicle, onBook }) {
           ? '0 20px 50px rgba(0,0,0,0.65), 0 0 0 1px rgba(201,168,76,0.1)'
           : '0 4px 16px rgba(0,0,0,0.35)',
         transition: 'transform 0.32s ease, box-shadow 0.32s ease',
-        /* ← mobile horizontal scroll width */
         flexShrink: 0,
         width: '282px',
         minWidth: '282px',
@@ -42,7 +42,7 @@ function VehicleCard({ vehicle, onBook }) {
       {/* ── Image ── */}
       <div style={{ position: 'relative', height: '185px', overflow: 'hidden' }}>
         <img
-          src={vehicle.image}
+          src={vehicle.image || vehicle.image_url}
           alt={vehicle.name}
           style={{
             width: '100%', height: '100%', objectFit: 'cover',
@@ -66,7 +66,7 @@ function VehicleCard({ vehicle, onBook }) {
           backdropFilter: 'blur(8px)',
           ...bs,
         }}>
-          {vehicle.categoryLabel}
+          {vehicle.categoryLabel || vehicle.category_label}
         </span>
       </div>
 
@@ -114,7 +114,7 @@ function VehicleCard({ vehicle, onBook }) {
               fontSize: '1rem', fontWeight: 700,
               color: '#C9A84C',
             }}>
-              ₹{vehicle.pricePerDay.toLocaleString()}
+              ₹{Number(vehicle.pricePerDay || vehicle.price_per_day).toLocaleString()}
             </span>
             <span style={{
               fontFamily: 'Inter, sans-serif',
@@ -129,6 +129,27 @@ function VehicleCard({ vehicle, onBook }) {
   )
 }
 
+/* ── Skeleton Card ────────────────────────────────────────── */
+function SkeletonCard() {
+  return (
+    <div style={{
+      background: '#181818', border: '1px solid #2A2A2A', borderRadius: '6px',
+      overflow: 'hidden', flexShrink: 0, width: '282px', minWidth: '282px',
+    }}>
+      <div style={{ height: '185px', background: '#222', animation: 'pulse 1.5s ease-in-out infinite' }} />
+      <div style={{ padding: '16px 18px 18px' }}>
+        <div style={{ height: '14px', background: '#2A2A2A', borderRadius: '4px', marginBottom: '8px', width: '70%', animation: 'pulse 1.5s ease-in-out infinite' }} />
+        <div style={{ height: '10px', background: '#222', borderRadius: '4px', marginBottom: '16px', width: '40%', animation: 'pulse 1.5s ease-in-out infinite' }} />
+        <div style={{ height: '1px', background: '#2A2A2A', marginBottom: '14px' }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ height: '10px', background: '#222', borderRadius: '4px', width: '45%', animation: 'pulse 1.5s ease-in-out infinite' }} />
+          <div style={{ height: '10px', background: '#2A2A2A', borderRadius: '4px', width: '30%', animation: 'pulse 1.5s ease-in-out infinite' }} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ── Featured Vehicles Section ────────────────────────────── */
 export default function FeaturedVehicles() {
   const [activeFilter, setActiveFilter] = useState('all')
@@ -136,14 +157,25 @@ export default function FeaturedVehicles() {
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [isBookingOpen, setIsBookingOpen] = useState(false)
 
+  // ── DB state
+  const [vehicles, setVehicles] = useState([])
+  const [loading, setLoading]   = useState(true)
+  const [error, setError]       = useState(null)
+
+  useEffect(() => {
+    getShowVehicles()
+      .then(data => { setVehicles(data); setLoading(false) })
+      .catch(err  => { setError(err.message); setLoading(false) })
+  }, [])
+
   const handleBook = (vehicle) => {
     setSelectedVehicle(vehicle)
     setIsBookingOpen(true)
   }
 
   const filtered = activeFilter === 'all'
-    ? showVehicles
-    : showVehicles.filter(v => v.category === activeFilter)
+    ? vehicles
+    : vehicles.filter(v => v.category === activeFilter)
 
   const scroll = (dir) => {
     if (scrollRef.current) {
@@ -241,65 +273,81 @@ export default function FeaturedVehicles() {
           })}
         </div>
 
-        {/* ── Cards ── */}
-        <div style={{ position: 'relative' }}>
-
-          {/* Scroll buttons — only show when needed */}
-          <button
-            onClick={() => scroll('left')}
-            style={{
-              position: 'absolute', left: '-18px',
-              top: '50%', transform: 'translateY(-50%)',
-              zIndex: 10,
-              width: '36px', height: '36px', borderRadius: '50%',
-              background: '#181818', border: '1px solid #2A2A2A',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#8A7A5F', cursor: 'pointer',
-              transition: 'border-color 0.2s, color 0.2s',
-            }}
-          >
-            <ChevronLeft size={17} />
-          </button>
-
-          <button
-            onClick={() => scroll('right')}
-            style={{
-              position: 'absolute', right: '-18px',
-              top: '50%', transform: 'translateY(-50%)',
-              zIndex: 10,
-              width: '36px', height: '36px', borderRadius: '50%',
-              background: '#181818', border: '1px solid #2A2A2A',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#8A7A5F', cursor: 'pointer',
-              transition: 'border-color 0.2s, color 0.2s',
-            }}
-          >
-            <ChevronRight size={17} />
-          </button>
-
-          {/* Scrollable / Grid row */}
-          <div
-            ref={scrollRef}
-            className="featured-cards-row"
-            style={{
-              display: 'flex',
-              gap: '20px',
-              overflowX: 'auto',
-              paddingBottom: '6px',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-            }}
-          >
-            {filtered.map(vehicle => (
-              <VehicleCard key={vehicle.id} vehicle={vehicle} onBook={handleBook} />
-            ))}
+        {/* ── Error state ── */}
+        {error && (
+          <div style={{ textAlign: 'center', padding: '40px 0', color: '#EF4444', fontSize: '0.85rem' }}>
+            ⚠ Failed to load vehicles: {error}
+            <br /><span style={{ color: '#8A7A5F', fontSize: '0.72rem' }}>Make sure WAMP is running and the database is set up.</span>
           </div>
-        </div>
+        )}
+
+        {/* ── Cards ── */}
+        {!error && (
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => scroll('left')}
+              style={{
+                position: 'absolute', left: '-18px',
+                top: '50%', transform: 'translateY(-50%)',
+                zIndex: 10,
+                width: '36px', height: '36px', borderRadius: '50%',
+                background: '#181818', border: '1px solid #2A2A2A',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#8A7A5F', cursor: 'pointer',
+                transition: 'border-color 0.2s, color 0.2s',
+              }}
+            >
+              <ChevronLeft size={17} />
+            </button>
+
+            <button
+              onClick={() => scroll('right')}
+              style={{
+                position: 'absolute', right: '-18px',
+                top: '50%', transform: 'translateY(-50%)',
+                zIndex: 10,
+                width: '36px', height: '36px', borderRadius: '50%',
+                background: '#181818', border: '1px solid #2A2A2A',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#8A7A5F', cursor: 'pointer',
+                transition: 'border-color 0.2s, color 0.2s',
+              }}
+            >
+              <ChevronRight size={17} />
+            </button>
+
+            {/* Scrollable / Grid row */}
+            <div
+              ref={scrollRef}
+              className="featured-cards-row"
+              style={{
+                display: 'flex',
+                gap: '20px',
+                overflowX: 'auto',
+                paddingBottom: '6px',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
+              {loading
+                ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+                : filtered.map(vehicle => (
+                    <VehicleCard key={vehicle.id} vehicle={vehicle} onBook={handleBook} />
+                  ))
+              }
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── Desktop: switch to 4-col grid ── */}
       <style>{`
         .featured-cards-row::-webkit-scrollbar { display: none; }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.4; }
+        }
 
         @media (min-width: 1024px) {
           .featured-cards-row {

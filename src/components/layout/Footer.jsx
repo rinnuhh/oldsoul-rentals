@@ -37,6 +37,7 @@ const quickLinks = [
 ]
 
 const supportLinks = [
+  { to: '/admin', label: 'Admin Portal 🔒' },
   { to: '/', label: 'Help Center' },
   { to: '/', label: 'Terms & Conditions' },
   { to: '/', label: 'Privacy Policy' },

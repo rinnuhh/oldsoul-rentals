@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, SlidersHorizontal, Fuel, Users, Star } from 'lucide-react'
-import { normalVehicles, vehicleTypes } from '../../data/vehicles'
+import { getNormalVehicles } from '../../services/vehicleService'
+import { vehicleTypes } from '../../data/vehicles'
 import BookingModal from '../layout/BookingModal'
 
 const fuelBadge = {
@@ -13,6 +14,15 @@ const fuelBadge = {
 function RentalCard({ vehicle, onBook }) {
   const fb = fuelBadge[vehicle.fuel] || { bg: '#F1F5F9', text: '#475569' }
   const [hovered, setHovered] = useState(false)
+
+  // Normalize field names from DB
+  const pricePerDay = Number(vehicle.pricePerDay || vehicle.price_per_day || 0)
+  const pricePerKm  = Number(vehicle.pricePerKm  || vehicle.price_per_km  || 0)
+  const image       = vehicle.image || vehicle.image_url
+  const features    = Array.isArray(vehicle.features)
+    ? vehicle.features
+    : (typeof vehicle.features === 'string' ? JSON.parse(vehicle.features) : [])
+  const available   = vehicle.available === true || vehicle.available === 1 || vehicle.available === '1'
 
   return (
     <div
@@ -33,7 +43,7 @@ function RentalCard({ vehicle, onBook }) {
       {/* Photo */}
       <div style={{ position: 'relative', height: '170px', overflow: 'hidden', background: '#F8FAFC' }}>
         <img
-          src={vehicle.image}
+          src={image}
           alt={vehicle.name}
           style={{
             width: '100%', height: '100%', objectFit: 'cover',
@@ -47,11 +57,11 @@ function RentalCard({ vehicle, onBook }) {
           fontFamily: 'Inter, sans-serif', fontSize: '0.62rem',
           fontWeight: 700, letterSpacing: '0.04em',
           padding: '3px 8px', borderRadius: '3px',
-          background: vehicle.available ? '#DCFCE7' : '#FEE2E2',
-          color: vehicle.available ? '#16A34A' : '#EF4444',
-          border: vehicle.available ? '1px solid #BBF7D0' : '1px solid #FCA5A5',
+          background: available ? '#DCFCE7' : '#FEE2E2',
+          color: available ? '#16A34A' : '#EF4444',
+          border: available ? '1px solid #BBF7D0' : '1px solid #FCA5A5',
         }}>
-          {vehicle.available ? '● Ready' : '● Booked'}
+          {available ? '● Ready' : '● Booked'}
         </span>
         {/* Category Badge */}
         <span style={{
@@ -108,7 +118,7 @@ function RentalCard({ vehicle, onBook }) {
 
           {/* Feature Tags */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '16px' }}>
-            {vehicle.features.slice(0, 3).map(f => (
+            {features.slice(0, 3).map(f => (
               <span key={f} style={{
                 fontFamily: 'Inter, sans-serif', fontSize: '0.6rem',
                 color: '#64748B', border: '1px solid #E2E8F0',
@@ -128,29 +138,29 @@ function RentalCard({ vehicle, onBook }) {
           <div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
               <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.05rem', fontWeight: 800, color: '#0F172A' }}>
-                ₹{vehicle.pricePerDay.toLocaleString()}
+                ₹{pricePerDay.toLocaleString()}
               </span>
               <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#64748B' }}>/day</span>
             </div>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.58rem', color: '#64748B', margin: '2px 0 0 0' }}>
-              ₹{vehicle.priceKm} /km extra
+              ₹{pricePerKm} /km extra
             </p>
           </div>
 
           <button
             onClick={() => onBook(vehicle)}
-            disabled={!vehicle.available}
+            disabled={!available}
             style={{
               fontFamily: 'Inter, sans-serif', fontSize: '0.72rem',
               fontWeight: 700, padding: '8px 16px', borderRadius: '4px',
-              border: 'none', cursor: vehicle.available ? 'pointer' : 'not-allowed',
-              background: vehicle.available ? '#2563EB' : '#F1F5F9',
-              color: vehicle.available ? '#FFFFFF' : '#94A3B8',
+              border: 'none', cursor: available ? 'pointer' : 'not-allowed',
+              background: available ? '#2563EB' : '#F1F5F9',
+              color: available ? '#FFFFFF' : '#94A3B8',
               transition: 'background 0.2s',
             }}
             className="rental-card-btn"
           >
-            {vehicle.available ? 'Book Car' : 'Unavailable'}
+            {available ? 'Book Car' : 'Unavailable'}
           </button>
         </div>
       </div>
@@ -158,39 +168,66 @@ function RentalCard({ vehicle, onBook }) {
   )
 }
 
+/* ── Skeleton Loader ──────────────────────────────────────── */
+function SkeletonCard() {
+  return (
+    <div style={{ background: '#FFFFFF', borderRadius: '6px', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+      <div style={{ height: '170px', background: '#F1F5F9', animation: 'rentalPulse 1.5s ease-in-out infinite' }} />
+      <div style={{ padding: '16px' }}>
+        <div style={{ height: '14px', background: '#E2E8F0', borderRadius: '4px', marginBottom: '10px', width: '60%', animation: 'rentalPulse 1.5s ease-in-out infinite' }} />
+        <div style={{ height: '10px', background: '#F1F5F9', borderRadius: '4px', marginBottom: '14px', width: '80%', animation: 'rentalPulse 1.5s ease-in-out infinite' }} />
+        <div style={{ height: '10px', background: '#E2E8F0', borderRadius: '4px', width: '90%', animation: 'rentalPulse 1.5s ease-in-out infinite' }} />
+      </div>
+    </div>
+  )
+}
+
 export default function RentalGrid() {
-  const [search, setSearch] = useState('')
-  const [activeType, setActiveType] = useState('all')
+  const [search, setSearch]           = useState('')
+  const [activeType, setActiveType]   = useState('all')
   const [showFilters, setShowFilters] = useState(false)
-  const [sortBy, setSortBy] = useState('price-asc')
+  const [sortBy, setSortBy]           = useState('price-asc')
   const [selectedVehicle, setSelectedVehicle] = useState(null)
-  const [isBookingOpen, setIsBookingOpen] = useState(false)
+  const [isBookingOpen, setIsBookingOpen]     = useState(false)
+
+  // ── DB state
+  const [vehicles, setVehicles] = useState([])
+  const [loading, setLoading]   = useState(true)
+  const [error, setError]       = useState(null)
+
+  useEffect(() => {
+    getNormalVehicles()
+      .then(data => { setVehicles(data); setLoading(false) })
+      .catch(err  => { setError(err.message); setLoading(false) })
+  }, [])
 
   const handleBook = (vehicle) => {
     setSelectedVehicle(vehicle)
     setIsBookingOpen(true)
   }
 
-  const filtered = normalVehicles
+  const filtered = vehicles
     .filter(v => {
       const matchSearch = v.name.toLowerCase().includes(search.toLowerCase())
       const matchType   = activeType === 'all' || v.type === activeType
       return matchSearch && matchType
     })
     .sort((a, b) => {
-      if (sortBy === 'price-asc')  return a.pricePerDay - b.pricePerDay
-      if (sortBy === 'price-desc') return b.pricePerDay - a.pricePerDay
+      const pa = Number(a.pricePerDay || a.price_per_day)
+      const pb = Number(b.pricePerDay || b.price_per_day)
+      if (sortBy === 'price-asc')  return pa - pb
+      if (sortBy === 'price-desc') return pb - pa
       return 0
     })
 
   return (
     <div style={{ background: '#F8FAFC', paddingBottom: '72px' }}>
-      
+
       {/* Search & Sort Panel */}
-      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', sticky: 'top', zIndex: 20 }}>
+      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', position: 'sticky', top: '80px', zIndex: 20 }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '20px 40px' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
-            
+
             {/* Search Input */}
             <div style={{ position: 'relative', flex: 1, minWidth: '240px' }}>
               <Search size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
@@ -274,23 +311,43 @@ export default function RentalGrid() {
 
       {/* Grid Content */}
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '32px 40px' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: '#64748B', marginBottom: '20px' }}>
-          Showing <strong style={{ color: '#0F172A' }}>{filtered.length}</strong> matching vehicles
-        </p>
 
-        {filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '64px 0' }}>
-            <p style={{ fontSize: '1.8rem', margin: '0 0 10px 0' }}>🔍</p>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#64748B' }}>No vehicles match your current search.</p>
+        {error && (
+          <div style={{ textAlign: 'center', padding: '60px 0' }}>
+            <p style={{ fontSize: '2rem', margin: '0 0 10px 0' }}>⚠️</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#EF4444' }}>
+              Failed to load vehicles: {error}
+            </p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: '#64748B' }}>
+              Please ensure WAMP is running and the database is set up.
+            </p>
           </div>
-        ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-            gap: '24px',
-          }}>
-            {filtered.map(v => <RentalCard key={v.id} vehicle={v} onBook={handleBook} />)}
-          </div>
+        )}
+
+        {!error && (
+          <>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: '#64748B', marginBottom: '20px' }}>
+              {loading
+                ? 'Loading vehicles from database…'
+                : <>Showing <strong style={{ color: '#0F172A' }}>{filtered.length}</strong> matching vehicles</>
+              }
+            </p>
+
+            {loading ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '24px' }}>
+                {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
+              </div>
+            ) : filtered.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '64px 0' }}>
+                <p style={{ fontSize: '1.8rem', margin: '0 0 10px 0' }}>🔍</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#64748B' }}>No vehicles match your current search.</p>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '24px' }}>
+                {filtered.map(v => <RentalCard key={v.id} vehicle={v} onBook={handleBook} />)}
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -302,11 +359,11 @@ export default function RentalGrid() {
       />
 
       <style>{`
-        .input-focus:focus {
-          border-color: #2563EB !important;
-        }
-        .rental-card-btn:hover {
-          background-color: #1D4ED8 !important;
+        .input-focus:focus { border-color: #2563EB !important; }
+        .rental-card-btn:hover { background-color: #1D4ED8 !important; }
+        @keyframes rentalPulse {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.5; }
         }
       `}</style>
 

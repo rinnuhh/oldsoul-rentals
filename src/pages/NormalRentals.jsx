@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Car, Shield, Clock, MapPin } from 'lucide-react'
+import { ArrowRight, Car, Shield, Clock, MapPin, Navigation, Compass, Sparkles } from 'lucide-react'
 import RentalGrid from '../components/normal/RentalGrid'
 
 const highlights = [
@@ -13,8 +13,63 @@ export default function NormalRentals() {
   return (
     <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingTop: '80px' }}>
       
+      {/* ── Animated Moving Side Car Track Banner ── */}
+      <div style={{
+        background: '#0F172A',
+        color: '#F8FAFC',
+        padding: '12px 0',
+        overflow: 'hidden',
+        position: 'relative',
+        borderBottom: '1px solid #1E293B',
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '24px',
+          width: '200%',
+          animation: 'movingIconSide 18s linear infinite',
+          whiteSpace: 'nowrap',
+        }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '30px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', fontWeight: 600, color: '#93C5FD' }}>
+              <Car size={18} style={{ color: '#60A5FA', animation: 'driveBounce 1s ease-in-out infinite alternate' }} />
+              ⚡ Instant Key Delivery Available in Kochi, Trivandrum & Calicut
+            </span>
+            <span style={{ color: '#475569' }}>•</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', fontWeight: 600, color: '#F1F5F9' }}>
+              <Navigation size={16} style={{ color: '#38BDF8' }} />
+              24/7 Roadside Assistance & GPS Live Tracking
+            </span>
+            <span style={{ color: '#475569' }}>•</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', fontWeight: 600, color: '#FDE047' }}>
+              <Sparkles size={16} style={{ color: '#FACC15' }} />
+              Special Weekend Daily Rate Reductions Active Now
+            </span>
+            <span style={{ color: '#475569' }}>•</span>
+          </div>
+
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '30px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', fontWeight: 600, color: '#93C5FD' }}>
+              <Car size={18} style={{ color: '#60A5FA', animation: 'driveBounce 1s ease-in-out infinite alternate' }} />
+              ⚡ Instant Key Delivery Available in Kochi, Trivandrum & Calicut
+            </span>
+            <span style={{ color: '#475569' }}>•</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', fontWeight: 600, color: '#F1F5F9' }}>
+              <Navigation size={16} style={{ color: '#38BDF8' }} />
+              24/7 Roadside Assistance & GPS Live Tracking
+            </span>
+            <span style={{ color: '#475569' }}>•</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', fontWeight: 600, color: '#FDE047' }}>
+              <Sparkles size={16} style={{ color: '#FACC15' }} />
+              Special Weekend Daily Rate Reductions Active Now
+            </span>
+            <span style={{ color: '#475569' }}>•</span>
+          </div>
+        </div>
+      </div>
+
       {/* ── Hero Banner ── */}
-      <section style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', padding: '64px 0 0 0' }}>
+      <section style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0', padding: '56px 0 0 0' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 40px' }}>
           <div style={{
             display: 'grid',
@@ -26,9 +81,9 @@ export default function NormalRentals() {
             {/* Left Copy */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#16A34A', display: 'inline-block' }} />
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#16A34A', display: 'inline-block' }} />
                 <span style={{
-                  fontFamily: 'Inter, sans-serif', fontSize: '0.62rem',
+                  fontFamily: 'Inter, sans-serif', fontSize: '0.65rem',
                   fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
                   color: '#64748B',
                 }}>
@@ -54,6 +109,43 @@ export default function NormalRentals() {
               }}>
                 Premium sedans, family SUVs, and city commuters at transparent pricing. Enjoy instant keys, full insurance, and zero hidden costs.
               </p>
+
+              {/* Moving Car Track Animation Line */}
+              <div style={{
+                position: 'relative',
+                background: '#F1F5F9',
+                border: '1px solid #E2E8F0',
+                borderRadius: '24px',
+                padding: '8px 16px',
+                marginBottom: '28px',
+                maxWidth: '420px',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+              }}>
+                <div style={{ fontSize: '0.68rem', fontWeight: 600, color: '#64748B', marginRight: '10px', whiteSpace: 'nowrap' }}>
+                  Live Fleet Movement:
+                </div>
+                <div style={{ position: 'relative', flex: 1, height: '24px', display: 'flex', alignItems: 'center' }}>
+                  <div style={{ position: 'absolute', inset: '0 0', borderTop: '2px dashed #CBD5E1', top: '50%', transform: 'translateY(-50%)' }} />
+                  <div style={{
+                    position: 'absolute',
+                    animation: 'carDriveTrack 6s ease-in-out infinite alternate',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    background: '#2563EB',
+                    color: '#FFFFFF',
+                    padding: '2px 8px',
+                    borderRadius: '12px',
+                    fontSize: '0.62rem',
+                    fontWeight: 700,
+                    boxShadow: '0 2px 8px rgba(37,99,235,0.4)',
+                  }}>
+                    <Car size={12} /> Moving Fleet
+                  </div>
+                </div>
+              </div>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
                 <a
@@ -98,7 +190,7 @@ export default function NormalRentals() {
                 position: 'absolute', inset: 0,
                 background: 'linear-gradient(to top, rgba(15,23,42,0.4) 0%, transparent 100%)',
               }} />
-              {/* Floating Badge */}
+              {/* Floating Badge with moving side icon effect */}
               <div style={{
                 position: 'absolute', bottom: '20px', left: '20px',
                 background: '#FFFFFF', borderRadius: '6px',
@@ -109,10 +201,10 @@ export default function NormalRentals() {
                   width: '36px', height: '36px', borderRadius: '4px',
                   background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Car size={16} style={{ color: '#2563EB' }} />
+                  <Car size={16} style={{ color: '#2563EB', animation: 'driveBounce 1.5s ease-in-out infinite alternate' }} />
                 </div>
                 <div>
-                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: '#0F172A', margin: 0 }}>250+ Autos</p>
+                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: '#0F172A', margin: 0 }}>250+ Autos Ready</p>
                   <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.67rem', color: '#64748B', margin: 0 }}>Clean & fully serviced</p>
                 </div>
               </div>
@@ -150,6 +242,18 @@ export default function NormalRentals() {
       </section>
 
       <style>{`
+        @keyframes movingIconSide {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes carDriveTrack {
+          0% { left: 0%; }
+          100% { left: 75%; }
+        }
+        @keyframes driveBounce {
+          0% { transform: translateX(0px); }
+          100% { transform: translateX(4px); }
+        }
         .rental-hero-btn:hover { background-color: #1D4ED8 !important; }
         .rental-sec-btn:hover { border-color: #94A3B8 !important; color: #0F172A !important; }
       `}</style>

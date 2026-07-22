@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, MapPin, Star, BadgeCheck, SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react'
-import { showVehicles, categoryFilters } from '../data/vehicles'
+import { categoryFilters } from '../data/vehicles'
+import { getShowVehicles } from '../services/vehicleService'
 import BookingModal from '../components/layout/BookingModal'
 
 const C = { maxWidth: '1280px', margin: '0 auto', padding: '0 40px' }
@@ -130,6 +131,8 @@ function VehicleCard({ vehicle, onBook }) {
 }
 
 export default function BrowseVehicles() {
+  const [vehicles, setVehicles] = useState([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [activeFilter, setActiveFilter] = useState('all')
   const [sortBy, setSortBy] = useState('featured')
@@ -137,9 +140,18 @@ export default function BrowseVehicles() {
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [isBookingOpen, setIsBookingOpen] = useState(false)
 
+  useEffect(() => {
+    getShowVehicles()
+      .then(data => {
+        setVehicles(data)
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
   const handleBook = (vehicle) => { setSelectedVehicle(vehicle); setIsBookingOpen(true) }
 
-  const filtered = showVehicles
+  const filtered = vehicles
     .filter(v => {
       const ms = v.name.toLowerCase().includes(search.toLowerCase()) || v.location.toLowerCase().includes(search.toLowerCase())
       const mc = activeFilter === 'all' || v.category === activeFilter
